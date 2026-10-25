@@ -1,7 +1,7 @@
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 ROOT=Path(__file__).resolve().parent
-html=(ROOT/'临界点_v11_战术预览版.html').read_text(encoding='utf-8')
+html=(ROOT/'临界点_v12_超燃回响版.html').read_text(encoding='utf-8')
 errors=[]
 with sync_playwright() as pw:
     browser=pw.chromium.launch(headless=True,executable_path='/usr/bin/chromium',args=['--no-sandbox','--disable-gpu'])
