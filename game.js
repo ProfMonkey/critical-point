@@ -1,4 +1,4 @@
-/* 临界点 v1.1 | ProfMonkey — 斜向新章、波纹传导、逐条演示。No dependencies. */
+/* 临界点 v1.2 | ProfMonkey — 斜向新章、波纹传导、逐条演示。No dependencies. */
 (() => {
 'use strict';
 const engine = window.CriticalEngine;
@@ -53,6 +53,16 @@ const SKINS = [
   {id:'gold',name:'王者金焰',price:5,icon:'👑',desc:'黑金终极主题 · Boss收藏款'}
 ];
 let forecastOn = false, forecastSelection = null, replayFrame = null;
+const PACE_KEY = 'profmonkey-critical-v12-pace';
+let fastPace = (()=>{try{return localStorage.getItem(PACE_KEY)!=='classic';}catch{return true;}})();
+const reducedMotion=()=>Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
+const waveDelay=(ms)=>reducedMotion()?Math.min(28,ms):Math.round(ms*(fastPace?.66:1));
+function syncPace(){
+  const button=$('pace');button.textContent=fastPace?'⚡ 爽快节奏':'🎞 经典节奏';
+  button.setAttribute('aria-pressed',String(fastPace));
+  document.body.classList.toggle('fast-pace',fastPace);
+}
+
 const DAILY_QUEST_KEY = 'profmonkey-critical-v10-daily-quests';
 const PROFILE_KEY = 'profmonkey-critical-v10-player-profile';
 const DAILY_QUESTS = [
@@ -247,28 +257,32 @@ function showForecast(i){
   info('🔮 这是预测，不扣步数；点「确认引爆」才会真正落子。');
 }
 // 上一步高光回放只渲染旧画面，回放结束恢复真实棋盘，不重复发奖、不记录成绩。
-async function replayLastMove(){
+async function replayLastMove(fromEnd=false){
   if(!replayFrame||busy||!replayFrame.waves.length)return;
-  if(document.querySelector('.backdrop.visible'))return;
+  const endBackdrop=$('endBackdrop');
+  const wasEnd=Boolean(fromEnd&&ended&&endBackdrop.classList.contains('visible'));
+  if(document.querySelector('.backdrop.visible')&&!wasEnd)return;
+  if(wasEnd)endBackdrop.classList.remove('visible');
   turnForecastOff();busy=true;boardEl.classList.add('busy');clearEffects();
   const myToken=token,record=replayFrame;
   $('replayLast').disabled=true;
   info('🎬 高光回放中（不会重复获得分数）',true);
   render(record.initial);
-  await pause(220);
+  await pause(waveDelay(220));
   for(const w of record.waves){
     if(myToken!==token)return;
     w.cells.forEach(i=>tiles[i].classList.add('bursting'));
     sparks(w.cells,w.depth);energyBeams(w.cells);
-    await pause(150);
+    await pause(waveDelay(150));
     if(myToken!==token)return;
     w.cells.forEach(i=>tiles[i].classList.remove('bursting'));
     render(w.board);
-    await pause(140);
+    await pause(waveDelay(140));
   }
   if(myToken!==token)return;
   render(board);busy=false;boardEl.classList.remove('busy');updateUI();
   info('✅ 回放结束，真实棋盘和分数没有变化。');
+  if(wasEnd){endBackdrop.classList.add('visible');$('endReplay').focus({preventScroll:true});}
 }
 function updateMission() {
   const panel = $('mission');
@@ -308,6 +322,7 @@ function updateUI() {
   $('undo').disabled = mode === 'blitz' || busy || undoUsed || !undoState || ended;
   $('endUndo').disabled = undoUsed || !undoState || mode === 'campaign' || mode === 'blitz';
   $('replayLast').disabled = busy || ended || !replayFrame || !replayFrame.waves.length;
+  $('endReplay').disabled = busy || !replayFrame || !replayFrame.waves.length;
   $('forecast').disabled=busy || ended || (mode==='blitz' ? timeLeft<=0 : movesLeft<1);
   $('hint').disabled = busy || hintUsed || ended || (mode === 'blitz' ? timeLeft<=0 : movesLeft === 0);
   $('hint').textContent = hintUsed ? '💡 提示已用' : '💡 提示一次';
@@ -431,6 +446,7 @@ function floatPoints(points,index) {
   card.append(el); setTimeout(() => el.remove(),850);
 }
 function sparks(indices,depth) {
+  if(reducedMotion())return;
   const chosen = indices.slice(0,Math.min(indices.length,6));
   for (const i of chosen) {
     const a = tiles[i].getBoundingClientRect(), p = card.getBoundingClientRect();
@@ -448,6 +464,7 @@ function sparks(indices,depth) {
 }
 // 一次波次的每个爆炸格子沿实际传播方向亮起能量束（含 ✕ 斜爆格）。
 function energyBeams(indices) {
+  if(reducedMotion())return;
   const bounds=card.getBoundingClientRect();
   const rects=tiles.map(el=>el.getBoundingClientRect());
   for(const i of indices.slice(0,9)){
@@ -463,7 +480,7 @@ function energyBeams(indices) {
   }
 }
 function combo(depth) {
-  if (depth < 2) return;
+  if (depth < 2 || reducedMotion()) return;
   const el=document.createElement('div'); el.className='combo';
   el.textContent=depth>=5?'⚡ '+depth+' 连爆！':'⚡ '+depth+' 连锁';
   card.append(el); setTimeout(() => el.remove(),620);
@@ -472,7 +489,7 @@ function rumble(depth) {
   card.classList.remove('shock','flare'); void card.offsetWidth;
   card.classList.add('shock'); if (depth >= 3) card.classList.add('flare');
   setTimeout(() => card.classList.remove('shock','flare'),440);
-  if(vibrationOn && navigator.vibrate && depth >= 3) { try{navigator.vibrate(depth>=5?[28,20,30]:23);} catch {} }
+  if(vibrationOn && !reducedMotion() && navigator.vibrate && depth >= 3) { try{navigator.vibrate(depth>=5?[28,20,30]:23);} catch {} }
 }
 function snap() { return { board: board.slice(), movesLeft, score, explosions, maxChain, bonusEarned, singleBangMax, targets:[...hitTargets], bossDamage, boostedOnce, diagonalOnce }; }
 function undo() {
@@ -584,7 +601,7 @@ async function tap(i) {
   singleBangMax=Math.max(singleBangMax,result.detonations);
   render(result.initial); tiles[i].classList.add('selected'); updateUI();
   let bossDamagedThisMove=false;
-  sound(280,.05,'triangle',.045); await pause(85);
+  sound(280,.05,'triangle',.045); await pause(waveDelay(85));
   if (myToken!==token) return;
   tiles[i].classList.remove('selected');
   if(!result.waves.length) { board=result.board;render(board);info(types[i] === engine.TYPES.AMPLIFIER ? '🔷 放大格 +2！继续蓄能，凑到临界值就会爆炸。' : `数字 +1。让几个 ${threshold-1} 靠近，准备连锁。`); }
@@ -595,12 +612,12 @@ async function tap(i) {
       wave.cells.forEach(k=>tiles[k].classList.add('bursting'));
       sparks(wave.cells,wave.depth); energyBeams(wave.cells); if(wave.depth>=2) combo(wave.depth);
       rumble(wave.depth); sound(240+wave.depth*68,Math.min(.2,.09+.013*wave.depth),'triangle',.045);
-      await pause(wave.depth>=8?80:115); if(myToken!==token)return;
+      await pause(waveDelay(wave.depth>=8?80:115)); if(myToken!==token)return;
       wave.cells.forEach(k=>tiles[k].classList.remove('bursting'));
       for(const k of wave.cells)if(types[k]===engine.TYPES.TARGET)hitTargets.add(k);
       if(mode==='campaign' && level().boss && !bossDamagedThisMove && wave.cells.some(k=>types[k]===engine.TYPES.BOSS)){bossDamage=Math.min(level().boss.hp,bossDamage+1);bossDamagedThisMove=true;info(`👾 Boss核心被引爆！生命 -1 · 剩余 ${Math.max(0,level().boss.hp-bossDamage)} HP`,true);sound(160,.18,'sawtooth',.06);}
       render(wave.board); score+=wave.points; explosions+=wave.cells.length; maxChain=Math.max(maxChain,wave.depth);
-      updateUI(); floatPoints(wave.points,wave.cells[0]); await pause(wave.depth>=8?45:75);
+      updateUI(); floatPoints(wave.points,wave.cells[0]); await pause(waveDelay(wave.depth>=8?45:75));
     }
     board=result.board;
     if(mode==='frenzy' && result.depth>=3 && bonusEarned<3) {
@@ -615,7 +632,7 @@ async function tap(i) {
     info(st===3?'🏆 三星已满足！可以领取通关，或继续刷分。':`✅ 目标达成！${campaign.nextStarText(level(),goalState())}，也可以立即结算。`,true);
   }
   if(mode==='blitz' && timeLeft<=0){finish();return;}
-  if(mode!=='blitz' && movesLeft===0){await pause(400);if(myToken===token)finish();}
+  if(mode!=='blitz' && movesLeft===0){await pause(waveDelay(400));if(myToken===token)finish();}
 }
 async function share(withScore) {
   const text = withScore ? (mode==='campaign'
@@ -653,6 +670,8 @@ $('predictionConfirm').addEventListener('click',()=>{
   const i=forecastSelection;turnForecastOff();void tap(i);
 });
 $('replayLast').addEventListener('click',()=>void replayLastMove());
+$('endReplay').addEventListener('click',()=>void replayLastMove(true));
+$('pace').addEventListener('click',()=>{fastPace=!fastPace;try{localStorage.setItem(PACE_KEY,fastPace?'fast':'classic');}catch{}syncPace();toast(fastPace?'⚡ 爽快节奏已开启':'🎞 已切换经典节奏');});
 $('claimWin').addEventListener('click',()=>{if(!busy && !ended && goalReached())finish();});
 document.querySelectorAll('[data-overload-difficulty]').forEach(b=>b.addEventListener('click',()=>{
   if(b.dataset.overloadDifficulty===overloadDifficulty)return;
@@ -675,7 +694,15 @@ $('vibration').setAttribute('aria-pressed',String(vibrationOn));
 $('vibration').addEventListener('click',()=>{vibrationOn=!vibrationOn;$('vibration').textContent=vibrationOn?'📳 震动开':'📴 震动关';$('vibration').setAttribute('aria-pressed',String(vibrationOn));try{localStorage.setItem('profmonkey-critical-v08-vibration',vibrationOn?'on':'off');}catch{}if(vibrationOn&&navigator.vibrate)navigator.vibrate(15);});
 $('sound').addEventListener('click',()=>{soundOn=!soundOn;$('sound').textContent=soundOn?'🔊 音效开启':'🔇 音效关闭';$('sound').setAttribute('aria-pressed',String(soundOn));if(soundOn)sound(540,.13,'triangle');});
 $('shareTop').addEventListener('click',()=>share(false));$('endShare').addEventListener('click',()=>share(true));
+function showPoster(){
+  if(busy){toast('正在连爆，请等动画结束后生成海报');return;}
+  const name=mode==='campaign'?`第 ${level().id} 关 · ${level().name}`:`${configs[mode].name}模式`;
+  const data={modeName:name,score,chain:maxChain,explosions,threshold,board:[...board],types:[...types],goal:mode==='campaign'?(levelWon||goalReached()?'挑战达标':'继续挑战'):'高分挑战',date:localDate(),skin:equippedSkin};
+  window.CriticalPoster?.open(data);
+}
+$('posterTop').addEventListener('click',showPoster);$('endPoster').addEventListener('click',showPoster);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.backdrop.visible:not(#tutorialBackdrop)').forEach(el=>el.classList.remove('visible'));});
 applySkin();
+syncPace();
 init(true);
 })();
