@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#080611">
   <meta name="description" content="临界点：一击引爆全场。ProfMonkey 连锁反应小游戏。">
-  <title>临界点 v1.1 战术预览 | ProfMonkey</title>
+  <title>临界点 v1.2 超燃回响 | ProfMonkey</title>
 <style>
 :root{color-scheme:dark;--bg:#0a1020;--stroke:rgba(196,217,255,.15);--text:#ebf3ff;--muted:#96a9c8;--accent:#ffc36e;--panel:#142139}
 *{box-sizing:border-box}
@@ -113,7 +113,7 @@ header{margin:16px 3px 19px}h1{font-weight:950;letter-spacing:.01em;font-size:cl
 </head>
 <body>
 <main class="shell">
-  <div class="brand"><span class="brand-left"><span class="monkey">🐒</span> PROFMONKEY / MINI GAME</span><span class="version">V 1.1 · TACTICAL</span></div>
+  <div class="brand"><span class="brand-left"><span class="monkey">🐒</span> PROFMONKEY / MINI GAME</span><span class="version">V 1.2 · OVERDRIVE</span></div>
   <header><h1>临界<em>点</em><span aria-hidden="true">⚡</span></h1><p class="tagline">点一下数字 <b>+1</b>，凑到 <b id="headlineThreshold">4</b> 就爆炸。<br>一次点击，引爆整个棋盘。</p></header>
   <nav class="modes" role="group" aria-label="选择游戏模式">
     <button type="button" class="mode active" data-mode="classic" aria-pressed="true">🎯 经典</button>
@@ -154,13 +154,14 @@ header{margin:16px 3px 19px}h1{font-weight:950;letter-spacing:.01em;font-size:cl
   <div class="prediction-strip" id="predictionStrip" hidden aria-live="polite"><div class="prediction-body"><b id="predictionTitle">🔮 预测中</b><span id="predictionDetail">选择一格查看预计爆炸效果</span></div><div class="prediction-actions"><button type="button" id="predictionConfirm" class="action primary" hidden>⚡ 确认引爆</button><button type="button" id="predictionCancel" class="action">取消</button></div></div>
   <div class="msg" id="message" role="status" aria-live="polite">点击一个发光的 3，看看能连炸几次！</div>
   <div class="actions"><button class="action" type="button" id="undo" disabled>↶ 撤回 (1)</button><button class="action" type="button" id="restart">↻ 重玩</button><button class="action primary" type="button" id="newBoard">✦ 新棋盘</button></div>
-  <div class="utilities"><button class="utility forecast-button" type="button" id="forecast" aria-pressed="false">🔮 战术预览：关</button><button class="utility" type="button" id="replayLast" disabled>🎬 回放上一步</button><button class="utility" type="button" id="hint">💡 提示一次</button><button class="utility" type="button" id="achievements">🏅 成就 <span id="badgeCount">0/17</span></button><button class="utility" type="button" id="help">▶ 演示规则</button><button class="utility" type="button" id="sound" aria-pressed="false">🔇 音效关闭</button><button class="utility" type="button" id="vibration" aria-pressed="false">📴 震动关</button></div>
-  <button class="utility bottom-share" type="button" id="shareTop">↗ 分享游戏给朋友</button>
+  <div class="utilities"><button class="utility forecast-button" type="button" id="forecast" aria-pressed="false">🔮 战术预览：关</button><button class="utility" type="button" id="replayLast" disabled>🎬 回放上一步</button><button class="utility" type="button" id="pace" aria-pressed="true">⚡ 爽快节奏</button><button class="utility" type="button" id="hint">💡 提示一次</button><button class="utility" type="button" id="achievements">🏅 成就 <span id="badgeCount">0/17</span></button><button class="utility" type="button" id="help">▶ 演示规则</button><button class="utility" type="button" id="sound" aria-pressed="false">🔇 音效关闭</button><button class="utility" type="button" id="vibration" aria-pressed="false">📴 震动关</button></div>
+  <div class="social-actions"><button class="utility bottom-share" type="button" id="shareTop">↗ 分享游戏给朋友</button><button class="utility bottom-share poster-trigger" type="button" id="posterTop">🖼 生成成绩海报</button></div>
   <div class="foot">数字达到 <b id="ruleThreshold">4</b> 就爆炸，向四周各传 1 · 连锁越深分数越高</div>
 </main>
 <div class="backdrop" id="endBackdrop" role="dialog" aria-modal="true" aria-labelledby="endTitle">
-  <section class="dialog"><div class="emoji" id="endEmoji">🏆</div><h2 id="endTitle">挑战完成！</h2><p class="desc" id="endDesc">再试一次，挑战更长的连锁。</p><strong class="huge" id="endScore">0</strong><div class="caption" id="endCaption">本局最终得分</div><div class="summary"><div><strong id="endChain">0</strong><small>最长连锁</small></div><div><strong id="endExplosions">0</strong><small>总爆炸数</small></div><div><strong id="endBest">0</strong><small>该模式最佳</small></div></div><button type="button" class="action primary wide end-next" id="endNext" hidden>➡ 挑战下一关</button><div class="earned-line" id="earnedLine"></div><div class="end-actions"><button class="action primary" type="button" id="endRestart">↻ 再来一次</button><button class="action" type="button" id="endNew">✦ 换盘挑战</button></div><div class="end-actions"><button class="action" type="button" id="endUndo">↶ 撤回一步</button><button class="action" type="button" id="endShare">↗ 分享战绩</button></div><button class="action wide" type="button" id="endClose" style="margin-top:9px">返回模式选择</button></section>
+  <section class="dialog"><div class="emoji" id="endEmoji">🏆</div><h2 id="endTitle">挑战完成！</h2><p class="desc" id="endDesc">再试一次，挑战更长的连锁。</p><strong class="huge" id="endScore">0</strong><div class="caption" id="endCaption">本局最终得分</div><div class="summary"><div><strong id="endChain">0</strong><small>最长连锁</small></div><div><strong id="endExplosions">0</strong><small>总爆炸数</small></div><div><strong id="endBest">0</strong><small>该模式最佳</small></div></div><button type="button" class="action primary wide end-next" id="endNext" hidden>➡ 挑战下一关</button><div class="earned-line" id="earnedLine"></div><div class="end-actions"><button class="action primary" type="button" id="endRestart">↻ 再来一次</button><button class="action" type="button" id="endNew">✦ 换盘挑战</button></div><div class="end-actions"><button class="action" type="button" id="endUndo">↶ 撤回一步</button><button class="action" type="button" id="endShare">↗ 分享战绩</button></div><div class="end-actions"><button class="action" type="button" id="endReplay" disabled>🎬 回看最后一击</button><button class="action primary" type="button" id="endPoster">🖼 生成战绩海报</button></div><button class="action wide" type="button" id="endClose" style="margin-top:9px">返回模式选择</button></section>
 </div>
+<div class="backdrop poster-backdrop" id="posterBackdrop" role="dialog" aria-modal="true" aria-labelledby="posterTitle"><section class="dialog poster-dialog"><div class="poster-heading"><div><span>PROFMONKEY / SHARE</span><h2 id="posterTitle">生成你的高光海报</h2></div><button class="poster-exit" id="posterClose" type="button" aria-label="关闭海报">✕</button></div><p class="desc">离线生成图片，包含真实分数和棋盘；不会上传你的战绩。</p><canvas id="posterCanvas" width="720" height="1280" role="img" aria-label="临界点成绩海报预览"></canvas><div class="end-actions poster-buttons"><button type="button" class="action primary" id="posterDownload">⬇ 保存图片</button><button type="button" class="action" id="posterShare">↗ 分享图片</button></div><div class="poster-tip" id="posterHint">保存 PNG 图片后，可以发送到朋友圈或聊天。</div></section></div>
 <div class="backdrop" id="rulesBackdrop" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
   <section class="dialog rules"><div class="emoji">⚡</div><h2 id="rulesTitle">规则别背，直接看爆炸！</h2>
     <p class="rules-hint">当前临界值：<b id="rulesThreshold">4</b>。选一个规则，棋盘会自己演示一次。<b>只要出现尚未学过的规则，就在开局前按顺序自动演示。</b></p>
@@ -216,5 +217,6 @@ header{margin:16px 3px 19px}h1{font-weight:950;letter-spacing:.01em;font-size:cl
 <script src="campaign.js"></script>
 <script src="game.js"></script>
 <script src="tutorial.js"></script>
+<script src="poster.js"></script>
 </body>
 </html>
