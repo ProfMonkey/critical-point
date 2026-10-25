@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#080611">
+  <meta name="description" content="临界点：一击引爆全场。ProfMonkey 连锁反应小游戏。">
+  <title>临界点 v1.1 战术预览 | ProfMonkey</title>
+<style>
+:root{color-scheme:dark;--bg:#0a1020;--stroke:rgba(196,217,255,.15);--text:#ebf3ff;--muted:#96a9c8;--accent:#ffc36e;--panel:#142139}
+*{box-sizing:border-box}
+html,body{min-height:100%;margin:0}
+body{font-family:Inter,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:var(--text);background:radial-gradient(ellipse 650px 360px at 50% -130px,#263e62,transparent 95%),radial-gradient(ellipse 420px 470px at -15% 105%,#162a49,transparent 85%),var(--bg);padding:18px 12px 45px;display:flex;justify-content:center}
+button{font-family:inherit;-webkit-tap-highlight-color:transparent}button:focus-visible{outline:3px solid #eacb95;outline-offset:3px}
+.shell{width:min(100%,496px)}
+.brand{display:flex;align-items:center;justify-content:space-between;color:#8fabd0;font-size:10px;font-weight:850;letter-spacing:.17em}
+.brand-left{display:flex;align-items:center;gap:8px}.monkey{font-size:20px;letter-spacing:0}.version{border:1px solid rgba(242,200,130,.23);background:#1e2d41;border-radius:100px;padding:5px 9px;color:#f0c887;letter-spacing:.04em}
+header{margin:16px 3px 19px}h1{font-weight:950;letter-spacing:.01em;font-size:clamp(38px,10vw,54px);margin:0 0 7px;line-height:1}h1 em{font-style:normal;color:var(--accent);text-shadow:0 0 30px rgba(254,194,102,.2)}
+.tagline{margin:0;color:#bdcde2;font-size:13px;line-height:1.7}.tagline b{color:#ffcf83}
+.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:13px;padding:5px;background:#111d32;border:1px solid var(--stroke);border-radius:14px}
+.mode{appearance:none;border:1px solid transparent;border-radius:9px;background:transparent;color:#9bb0ce;min-height:43px;font-size:13px;font-weight:800;cursor:pointer}
+.mode.active{background:linear-gradient(145deg,#f8cd86,#eaaa58);border-color:#f2c47b;color:#342314;box-shadow:0 3px 10px rgba(255,194,105,.12)}.mode:not(.active):hover{background:#1d304b;color:white}
+.mode-desc{color:#aabfdb;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;line-height:1.4;margin:0 3px 12px;min-height:30px}
+.chip{display:inline-flex;gap:4px;align-items:center;white-space:nowrap;color:#ffd594;border:1px solid rgba(255,198,115,.24);padding:5px 7px;border-radius:99px;background:rgba(255,180,70,.08);font-size:10px;font-weight:800}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:11px}.stat{background:rgba(19,33,54,.94);border:1px solid var(--stroke);border-radius:13px;padding:10px 9px;min-width:0}.stat small{display:block;font-size:11px;color:#a0b5d3;margin-bottom:4px}.stat strong{display:block;font-size:clamp(22px,6vw,28px);line-height:1.06;font-weight:900;font-variant-numeric:tabular-nums;white-space:nowrap}.stat:first-child strong{color:#f8c778}
+.record-line{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#9db1ce;font-size:11px;margin:0 4px 8px}.record-line b{color:#e0edff;font-weight:800}
+.board-card{position:relative;padding:clamp(6px,2vw,10px);border-radius:19px;background:linear-gradient(135deg,#2b4160,#13223a 75%);border:1px solid rgba(208,226,255,.19);box-shadow:0 18px 45px rgba(0,0,0,.2);overflow:hidden;isolation:isolate}
+.board{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(4px,1.2vw,8px)}
+.cell{position:relative;overflow:hidden;display:grid;place-items:center;aspect-ratio:1;min-width:0;background:#17243c;color:#a5afc0;font-size:clamp(20px,6vw,29px);font-weight:900;appearance:none;border:1px solid rgba(250,250,255,.09);border-radius:clamp(8px,2.5vw,13px);cursor:pointer;transition:transform .12s ease,filter .12s ease,border-color .12s ease;isolation:isolate;user-select:none}
+.cell:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 27% 20%,rgba(255,255,255,.16),transparent 68%);z-index:-1}
+.cell[data-v="0"]{background:#142239;color:#50627a}.cell[data-v="1"]{background:linear-gradient(130deg,#294975,#213659);color:#b7daff}.cell[data-v="2"]{background:linear-gradient(140deg,#206c7b,#1c526a);color:#b2fff2}.cell[data-v="3"]{background:linear-gradient(130deg,#bc7040,#84442a);color:#ffebc5;border-color:rgba(255,221,164,.27);box-shadow:inset 0 0 18px rgba(253,174,66,.09)}
+.cell.hotspot{box-shadow:inset 0 0 0 2px rgba(255,224,167,.13)}.cell.selected{outline:2px solid #fff;outline-offset:-4px;z-index:1}.cell.bursting{z-index:2;animation:pop .24s ease-in-out both}
+@media(hover:hover){.cell:hover:not(:disabled){transform:translateY(-1px);border-color:rgba(255,255,255,.6);filter:brightness(1.12)}}.cell:active:not(:disabled){transform:scale(.94)}
+@keyframes pop{0%{filter:brightness(1);transform:scale(1)}48%{filter:brightness(2.6);transform:scale(1.13)}100%{filter:brightness(1.25);transform:scale(1)}}
+.board.busy .cell{pointer-events:none;cursor:default}.board-card.shock{animation:shake .26s ease}.board-card.flare:before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:4;animation:flare .42s ease forwards;background:radial-gradient(ellipse at center,rgba(255,228,159,.35),transparent 75%)}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-3px)}45%{transform:translateX(3px)}72%{transform:translateX(-2px)}}@keyframes flare{from{opacity:.8}to{opacity:0}}
+.float{position:absolute;pointer-events:none;z-index:10;transform:translateX(-50%);font-size:clamp(16px,4vw,22px);font-weight:950;white-space:nowrap;color:#ffdb99;text-shadow:0 2px 12px #000,0 0 20px rgba(255,187,82,.6);animation:rise .82s ease-out forwards}
+@keyframes rise{to{transform:translate(-50%,-67px) scale(1.12);opacity:0}}
+.spark{position:absolute;border-radius:100px;pointer-events:none;z-index:10;animation:sparkMove .66s ease-out forwards;box-shadow:0 0 8px currentColor}
+@keyframes sparkMove{from{transform:translate(0,0) scale(1);opacity:1}to{transform:translate(var(--dx),var(--dy)) scale(.25);opacity:0}}
+.combo{position:absolute;left:50%;top:43%;z-index:9;pointer-events:none;transform:translate(-50%,-50%);font-weight:1000;font-size:clamp(28px,8vw,42px);letter-spacing:.025em;color:#fff1d0;text-shadow:0 5px 18px rgba(0,0,0,.8),0 0 23px #ff982f;animation:comboIn .55s cubic-bezier(.18,.85,.26,1) both}
+@keyframes comboIn{0%{opacity:0;transform:translate(-50%,-45%) scale(.4)}35%{opacity:1;transform:translate(-50%,-50%) scale(1.16)}100%{opacity:0;transform:translate(-50%,-70%) scale(1)}}
+.msg{margin:12px 0;min-height:47px;border-radius:12px;border:1px solid var(--stroke);background:#111d31;color:#c9d8eb;padding:11px 12px;display:flex;align-items:center;gap:9px;font-size:12px;line-height:1.5}.msg:before{content:"✦";color:#f7bd68;font-size:18px;flex-shrink:0}.msg.hot{border-color:rgba(255,191,98,.36);background:#3a2b29;color:#ffe0a5}
+.actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.action{appearance:none;border-radius:11px;border:1px solid #314967;background:#1a2a42;color:#d8e7f9;font-size:13px;font-weight:850;min-height:48px;padding:9px 4px;cursor:pointer;transition:transform .13s ease,filter .13s ease}.action:active{transform:scale(.96)}.action.primary{border-color:#efc079;background:linear-gradient(125deg,#f7c77a,#edab59);color:#2d1d12}.action:disabled{opacity:.42;cursor:not-allowed}
+.utilities{display:flex;justify-content:space-between;gap:10px;margin:12px 3px 0}.utility{border:0;background:transparent;color:#9db2ce;font-size:12px;font-weight:750;padding:7px 4px;cursor:pointer}.utility:hover{color:#fff}.foot{margin:14px 4px 0;text-align:center;color:#738baa;font-size:11px;line-height:1.6}
+.backdrop{position:fixed;inset:0;z-index:30;background:rgba(4,8,18,.78);backdrop-filter:blur(8px);display:none;justify-content:center;align-items:center;padding:16px}.backdrop.visible{display:flex}.dialog{width:min(100%,380px);border-radius:22px;border:1px solid rgba(252,214,157,.32);background:linear-gradient(155deg,#263a57,#111c30 87%);box-shadow:0 35px 80px rgba(0,0,0,.45);text-align:center;padding:27px 22px 21px}.dialog .emoji{font-size:42px;margin-bottom:8px}.dialog h2{margin:0 0 7px;font-size:25px}.dialog .desc{margin:0 0 14px;color:#b4c8e0;font-size:12px;line-height:1.65}.dialog .huge{display:block;color:var(--accent);font-size:47px;font-weight:950;letter-spacing:-.05em;font-variant-numeric:tabular-nums;margin-bottom:5px}.dialog .caption{color:#9db1cc;font-size:12px;margin-bottom:19px}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:16px}.summary div{border:1px solid var(--stroke);border-radius:10px;background:rgba(255,255,255,.03);padding:10px 4px}.summary strong{display:block;font-size:20px;color:#edf4ff}.summary small{color:#99adca;font-size:10px}.end-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}.wide{width:100%}.dialog .action{min-height:46px}
+.rules{max-width:355px;text-align:left}.rules h2{text-align:center}.rules p{font-size:14px;line-height:1.8;color:#c7d8ed}.rules b{color:#ffcd81}.rules .action{margin-top:7px}
+.toast{position:fixed;left:50%;bottom:clamp(18px,4vh,40px);transform:translateX(-50%);z-index:45;border:1px solid #445b77;border-radius:12px;padding:11px 18px;background:#1a2a43;color:#ebf4ff;font-size:12px;box-shadow:0 10px 26px #05090d;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s}.toast.show{opacity:1}
+@media(max-width:375px){body{padding:15px 8px 30px}.actions{gap:6px}.action{font-size:12px}.stat{padding:10px 7px}.mode{font-size:12px}.mode-desc{font-size:11px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* 旧版本基础样式：特殊数字 / 6 种模式；v0.8 共 26 关 */
+.modes{grid-template-columns:repeat(3,minmax(0,1fr))}
+.mode{font-size:12px;min-width:0;padding:5px 1px}
+.mission{margin:1px 0 12px;padding:13px 13px 12px;border:1px solid rgba(249,198,115,.27);border-radius:15px;background:linear-gradient(120deg,rgba(73,51,36,.79),rgba(25,37,56,.93));}
+.mission[hidden],.end-next[hidden]{display:none!important}
+.mission-head{display:flex;align-items:center;justify-content:space-between;gap:7px;margin-bottom:7px}
+.mission-head small{display:block;color:#f8c77b;font-size:10px;font-weight:850;letter-spacing:.09em}
+.mission-head h3{font-size:17px;line-height:1.4;margin:1px 0 0}
+.mission-head button{border:1px solid rgba(255,204,134,.28);border-radius:10px;background:rgba(17,27,43,.6);color:#ffe0a9;padding:8px 10px;font-size:11px;font-weight:850;white-space:nowrap;cursor:pointer}
+.mission-sub{font-size:11px;color:#b9cce3;margin:0 0 9px}
+.goal-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;color:#ffe1af;font-size:11px;font-weight:760;margin-bottom:7px}
+.goal-track{height:8px;border-radius:99px;background:#0d1b31;overflow:hidden;border:1px solid rgba(252,231,201,.09)}
+.goal-fill{height:100%;width:0;background:linear-gradient(90deg,#eaaa63,#fff0a8);border-radius:inherit;transition:width .28s ease}
+.level-dialog{width:min(100%,430px);max-height:min(86vh,790px);overflow-y:auto;text-align:left}
+.level-dialog h2,.badge-dialog h2{text-align:left}
+.level-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:15px 0 12px}
+.level-tile{appearance:none;display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;min-height:101px;border:1px solid rgba(180,203,235,.19);border-radius:13px;background:linear-gradient(135deg,#203652,#17263d);color:#f5f9ff;padding:12px;cursor:pointer}
+.level-tile span{font-size:16px;color:#ffc77b;font-weight:950}
+.level-tile b{font-size:13px}.level-tile small{font-size:11px;color:#b2c7df}
+.level-tile.active{border-color:#ffd187;box-shadow:inset 0 0 0 1px rgba(255,199,128,.13)}
+.level-tile.locked{opacity:.42;cursor:not-allowed}
+.badge-dialog{width:min(100%,415px);max-height:85vh;overflow:auto;text-align:left}
+.badge-grid{display:grid;gap:8px;margin:13px 0}
+.badge-tile{display:flex;align-items:center;gap:12px;text-align:left;background:#131e31;border-radius:13px;border:1px solid rgba(199,219,248,.14);padding:10px;opacity:.43}
+.badge-tile.earned{opacity:1;border-color:rgba(255,207,132,.36);background:#27303c}
+.badge-icon{font-size:25px;width:37px;text-align:center;flex-shrink:0;filter:grayscale(.5)}
+.badge-tile.earned .badge-icon{filter:none}
+.badge-tile b{display:block;color:#edf5ff;font-size:13px;margin-bottom:3px}
+.badge-tile small{display:block;color:#a9bfdc;font-size:11px;line-height:1.45}
+.earned-line{font-size:12px;font-weight:850;color:#ffe1a8;line-height:1.7;margin:3px 0 11px}
+.earned-line:empty{display:none}
+.cell.hinted{outline:3px solid #fdf4bd;outline-offset:-4px;animation:hintPulse 1s ease-in-out infinite;z-index:4}
+@keyframes hintPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,231,164,.52)}50%{box-shadow:0 0 0 6px rgba(255,231,164,0)}}
+.utilities{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;align-items:center;margin:9px 0}
+.utility{min-width:0;white-space:nowrap;padding:8px 2px;font-size:11px;text-align:center}
+.bottom-share{display:block;margin:0 auto 0;font-size:11px;color:#8fa8c8}
+.action-note{font-size:11px;color:#90aacc;text-align:center;line-height:1.55;margin:4px auto}
+.end-next{margin:0 0 8px;display:block}
+@media(max-width:375px){.mode{font-size:11px}.utility{font-size:10px}.level-tile{min-height:92px}}
+
+/* v0.4 improvements */
+.variant-line{border:1px solid rgba(119,204,248,.24);background:linear-gradient(105deg,rgba(30,55,79,.86),rgba(27,38,56,.92));padding:10px 12px;margin:-4px 0 12px;border-radius:12px;color:#bfeaff;font-size:11px;line-height:1.7;font-weight:760}
+.variant-line[hidden]{display:none!important}
+.cell[data-v="4"]{background:linear-gradient(140deg,#6443a9,#43327e);color:#f0d6ff;border-color:rgba(210,168,255,.35)}
+.cell[data-v="5"]{background:linear-gradient(140deg,#8e3061,#5c2c53);color:#ffe4f0;border-color:rgba(255,168,217,.38)}
+.cell[data-v="rock"]{background:repeating-linear-gradient(135deg,#354153 0,#354153 7px,#2a3547 7px,#2a3547 14px);color:#8796a9;border-color:#536478;cursor:not-allowed}
+.cell[data-type="boost"]{border:2px solid #66dbff;box-shadow:inset 0 0 10px rgba(58,197,252,.24),0 0 8px rgba(73,186,255,.14)}
+.cell[data-type="target"]{border:2px solid #ffe180;box-shadow:inset 0 0 9px rgba(255,205,83,.24),0 0 9px rgba(255,196,71,.16)}
+.cell[data-type="target"].cleared{border-color:#83eb9f;box-shadow:inset 0 0 9px rgba(82,208,136,.25)}
+.cell[data-mark]:not([data-mark=""]):before{content:attr(data-mark);position:absolute;z-index:4;top:3px;right:4px;color:#d6f5ff;background:rgba(5,15,33,.57);border-radius:5px;font-size:9px;line-height:1;letter-spacing:-.02em;padding:3px 3px;font-weight:900}
+.cell[data-type="target"]:before{color:#ffe5a3!important}
+.cell[data-type="target"].cleared:before{color:#a8ffd0!important}
+.cell:disabled{filter:brightness(.9)}
+.mode{min-height:39px}.modes{margin-bottom:12px}
+.level-dialog{max-height:min(89vh,830px)}
+.level-grid{gap:7px}
+.level-tile{min-height:92px;padding:10px 11px}
+.level-tile .type-hint{font-size:10px;color:#c7e8ff;margin-left:auto}
+@media(max-width:375px){.cell[data-mark]:not([data-mark=""]):before{top:2px;right:2px;font-size:8px}.variant-line{font-size:10px}}
+</style>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+<main class="shell">
+  <div class="brand"><span class="brand-left"><span class="monkey">🐒</span> PROFMONKEY / MINI GAME</span><span class="version">V 1.0 · DAILY OPS</span></div>
+  <header><h1>临界<em>点</em><span aria-hidden="true">⚡</span></h1><p class="tagline">点一下数字 <b>+1</b>，凑到 <b id="headlineThreshold">4</b> 就爆炸。<br>一次点击，引爆整个棋盘。</p></header>
+  <nav class="modes" role="group" aria-label="选择游戏模式">
+    <button type="button" class="mode active" data-mode="classic" aria-pressed="true">🎯 经典</button>
+    <button type="button" class="mode" data-mode="frenzy" aria-pressed="false">🔥 狂热</button>
+    <button type="button" class="mode" data-mode="daily" aria-pressed="false">📅 每日</button>
+    <button type="button" class="mode" data-mode="campaign" aria-pressed="false">🗺 闯关</button>
+    <button type="button" class="mode" data-mode="overload" aria-pressed="false">🔢 超载</button>
+    <button type="button" class="mode" data-mode="blitz" aria-pressed="false">⏱ 极速</button>
+  </nav>
+  <div class="mode-desc"><span id="modeInfo">12 次点击，争取最高分</span><span class="chip" id="modeChip">原味挑战</span></div>
+  <div class="currency-row"><span class="currency-pill">💎 能量晶核 <b id="crystalCount">0</b></span><button type="button" class="utility shop-open" id="openShop">🎨 外观商店</button></div>
+  <div class="meta-actions"><button type="button" class="meta-button quest-button" id="openQuests">📋 每日任务 <b id="questCount">0/3</b></button><button type="button" class="meta-button" id="openProfile">📊 个人档案</button></div>
+  <div class="overload-settings" id="overloadSettings" hidden>
+    <div class="overload-label">🌋 超载难度 <small>都需要数字达到 6 才爆炸</small></div>
+    <div class="difficulty-options" role="group" aria-label="超载难度">
+      <button type="button" data-overload-difficulty="easy" aria-pressed="true">✨ 舒适 · 20步</button>
+      <button type="button" data-overload-difficulty="hard" aria-pressed="false">🔥 挑战 · 16步</button>
+    </div>
+    <p id="overloadNote">高能开局，更多接近爆炸的数字；推荐先玩这个。</p>
+  </div>
+  <div class="variant-line" id="variantLine" hidden></div>
+  <section class="mission" id="mission" hidden aria-label="闯关任务">
+    <div class="mission-head"><div><small id="missionIndex">关卡 1 / 26</small><h3 id="missionName">第一声爆炸</h3></div><button type="button" id="levelPicker">🗺 选关</button></div>
+    <p class="mission-sub" id="missionSub">先试试让火花连起来</p>
+    <div class="boss-panel" id="bossPanel" hidden>
+      <div class="boss-head"><span class="boss-avatar" id="bossIcon">👾</span><div class="boss-title"><strong id="bossName">Boss</strong><small>CORE SHIELD / 核心护盾</small></div><b id="bossHpText">3 / 3</b></div>
+      <div class="boss-track" role="progressbar" aria-label="Boss剩余生命"><div class="boss-fill" id="bossFill"></div></div>
+      <div class="boss-pips" id="bossPips" aria-hidden="true"></div>
+    </div>
+    <div class="goal-meta"><span id="missionGoal">总得分达到 50 分</span><span id="missionStars">☆☆☆</span></div>
+    <div class="goal-track" role="progressbar" aria-label="关卡目标进度"><div class="goal-fill" id="goalFill"></div></div>
+    <div class="mission-chase" id="missionChase">达到目标后继续挑战更高星级。</div>
+    <button class="action claim-win" id="claimWin" type="button" hidden>🎉 目标已完成 · 立即结算</button>
+  </section>
+  <section class="stats" aria-label="游戏数据"><div class="stat"><small id="movesLabel">剩余点击</small><strong id="moves">12</strong></div><div class="stat"><small>本局得分</small><strong id="score">0</strong></div><div class="stat"><small>最佳纪录</small><strong id="best">0</strong></div></section>
+  <div class="record-line"><span>💥 爆炸次数 <b id="explosions">0</b></span><span>⚡ 最长连锁 <b id="maxChain">0 层</b></span><span id="extraInfo">↶ 可撤回 1 次</span></div>
+  <section class="board-card" id="boardCard" aria-label="六乘六数字棋盘"><div class="board" id="board" role="group" aria-label="点击任意格子数字加一"></div></section>
+  <div class="prediction-strip" id="predictionStrip" hidden aria-live="polite"><div class="prediction-body"><b id="predictionTitle">🔮 预测中</b><span id="predictionDetail">选择一格查看预计爆炸效果</span></div><div class="prediction-actions"><button type="button" id="predictionConfirm" class="action primary" hidden>⚡ 确认引爆</button><button type="button" id="predictionCancel" class="action">取消</button></div></div>
+  <div class="msg" id="message" role="status" aria-live="polite">点击一个发光的 3，看看能连炸几次！</div>
+  <div class="actions"><button class="action" type="button" id="undo" disabled>↶ 撤回 (1)</button><button class="action" type="button" id="restart">↻ 重玩</button><button class="action primary" type="button" id="newBoard">✦ 新棋盘</button></div>
+  <div class="utilities"><button class="utility forecast-button" type="button" id="forecast" aria-pressed="false">🔮 战术预览：关</button><button class="utility" type="button" id="replayLast" disabled>🎬 回放上一步</button><button class="utility" type="button" id="hint">💡 提示一次</button><button class="utility" type="button" id="achievements">🏅 成就 <span id="badgeCount">0/17</span></button><button class="utility" type="button" id="help">▶ 演示规则</button><button class="utility" type="button" id="sound" aria-pressed="false">🔇 音效关闭</button><button class="utility" type="button" id="vibration" aria-pressed="false">📴 震动关</button></div>
+  <button class="utility bottom-share" type="button" id="shareTop">↗ 分享游戏给朋友</button>
+  <div class="foot">数字达到 <b id="ruleThreshold">4</b> 就爆炸，向四周各传 1 · 连锁越深分数越高</div>
+</main>
+<div class="backdrop" id="endBackdrop" role="dialog" aria-modal="true" aria-labelledby="endTitle">
+  <section class="dialog"><div class="emoji" id="endEmoji">🏆</div><h2 id="endTitle">挑战完成！</h2><p class="desc" id="endDesc">再试一次，挑战更长的连锁。</p><strong class="huge" id="endScore">0</strong><div class="caption" id="endCaption">本局最终得分</div><div class="summary"><div><strong id="endChain">0</strong><small>最长连锁</small></div><div><strong id="endExplosions">0</strong><small>总爆炸数</small></div><div><strong id="endBest">0</strong><small>该模式最佳</small></div></div><button type="button" class="action primary wide end-next" id="endNext" hidden>➡ 挑战下一关</button><div class="earned-line" id="earnedLine"></div><div class="end-actions"><button class="action primary" type="button" id="endRestart">↻ 再来一次</button><button class="action" type="button" id="endNew">✦ 换盘挑战</button></div><div class="end-actions"><button class="action" type="button" id="endUndo">↶ 撤回一步</button><button class="action" type="button" id="endShare">↗ 分享战绩</button></div><button class="action wide" type="button" id="endClose" style="margin-top:9px">返回模式选择</button></section>
+</div>
+<div class="backdrop" id="rulesBackdrop" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
+  <section class="dialog rules"><div class="emoji">⚡</div><h2 id="rulesTitle">规则别背，直接看爆炸！</h2>
+    <p class="rules-hint">当前临界值：<b id="rulesThreshold">4</b>。选一个规则，棋盘会自己演示一次。<b>只要出现尚未学过的规则，就在开局前按顺序自动演示。</b></p>
+    <div class="rules-demo-grid">
+      <button type="button" class="rules-demo-btn" data-demo="base">💥 数字满格爆炸</button>
+      <button type="button" class="rules-demo-btn" data-demo="chain">⚡ 连锁反应</button>
+      <button type="button" class="rules-demo-btn" data-demo="goalChain">📈 最长连锁任务</button>
+      <button type="button" class="rules-demo-btn" data-demo="goalExplosions">💣 累计爆炸任务</button>
+      <button type="button" class="rules-demo-btn" data-demo="boost">🔷 ×2 放大格</button>
+      <button type="button" class="rules-demo-btn" data-demo="diagonal">🟣 ✕ 斜向爆炸</button>
+      <button type="button" class="rules-demo-btn" data-demo="diagonalMix">👾 斜爆目标组合</button>
+      <button type="button" class="rules-demo-btn" data-demo="rock">🧱 石墙拦截</button>
+      <button type="button" class="rules-demo-btn" data-demo="target">🎯 金色目标</button>
+      <button type="button" class="rules-demo-btn" data-demo="cross">🌟 ×2 联动目标</button>
+      <button type="button" class="rules-demo-btn" data-demo="five">🔢 数字 4 / 凑到 5</button>
+      <button type="button" class="rules-demo-btn" data-demo="six">🌋 数字 5 / 凑到 6</button>
+      <button type="button" class="rules-demo-btn" data-demo="mixed">👑 终极混合关</button>
+      <button type="button" class="rules-demo-btn" data-demo="boss">👾 Boss生命与核心</button>
+      <button type="button" class="rules-demo-btn" data-demo="campaign">🏁 闯关目标</button>
+      <button type="button" class="rules-demo-btn" data-demo="quests">📋 每日任务与晶核奖励</button>
+      <button type="button" class="rules-demo-btn" data-demo="frenzy">🔥 狂热奖励步数</button>
+      <button type="button" class="rules-demo-btn" data-demo="daily">📅 每日同盘</button>
+      <button type="button" class="rules-demo-btn" data-demo="blitz">⏱ 极速倒计时</button>
+      <button type="button" class="rules-demo-btn" data-demo="overload">🚀 超载舒适模式</button>
+      <button type="button" class="rules-demo-btn" data-demo="overloadHard">🔥 超载挑战模式</button>
+    </div>
+    <button type="button" class="action primary wide" id="closeRules">返回游戏，继续开炸</button>
+  </section>
+</div>
+<div class="backdrop tutorial-backdrop" id="tutorialBackdrop" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
+  <section class="dialog tutorial-dialog">
+    <div class="tutorial-tag"><span id="tutorialAutoplay">新机制解锁 · 自动演示</span><strong id="tutorialSequence" class="tutorial-sequence">本次新规则 1/1</strong></div>
+    <div class="tutorial-heading"><span class="tutorial-icon" id="tutorialIcon">💥</span><h2 id="tutorialTitle">满格爆炸</h2></div>
+    <p class="tutorial-lead" id="tutorialLead">看一遍你就懂了。</p>
+    <div class="tutorial-stage">
+      <div class="tutorial-status" role="status"><span id="tutorialStatus">STEP 01 / 准备</span><span id="tutorialDetail">蓄能中…</span></div>
+      <div class="tutorial-meter" id="tutorialMeter" role="status">💥 临界值：4</div>
+      <div class="tutorial-board" id="tutorialBoard" aria-label="规则动画演示，六乘六棋盘"></div>
+      <div class="tutorial-outcome" id="tutorialOutcome" role="status" aria-live="polite">演示马上开始…</div>
+    </div>
+    <div class="tutorial-dots" id="tutorialDots" aria-hidden="true"></div>
+    <div class="tutorial-actions"><button type="button" class="action" id="tutorialReplay">↻ 再演示一次</button><button type="button" class="action primary" id="tutorialStart">开始玩！⚡</button></div>
+    <p class="tutorial-small">每个新机制第一次出现时，开局前自动播放；不同规则会依次演示。<br>演示与真实对局隔离，不扣步数、不改关卡；忘记了可随时重播。</p>
+  </section>
+</div>
+<div class="backdrop" id="levelBackdrop" role="dialog" aria-modal="true" aria-labelledby="levelTitle"><section class="dialog level-dialog"><div class="emoji">🗺</div><h2 id="levelTitle">闯关地图</h2><p class="desc" id="levelIntro">已解锁 1 / 29 关</p><div class="level-grid" id="levelGrid"></div><button type="button" class="action wide" id="closeLevels">返回游戏</button></section></div>
+<div class="backdrop" id="badgeBackdrop" role="dialog" aria-modal="true" aria-labelledby="badgeTitle"><section class="dialog badge-dialog"><div class="emoji">🏅</div><h2 id="badgeTitle">成就陈列馆</h2><p class="desc" id="badgeIntro">完成挑战即可领取</p><div class="badge-grid" id="badgeGrid"></div><button type="button" class="action wide" id="closeBadges">返回游戏</button></section></div>
+<div class="backdrop" id="shopBackdrop" role="dialog" aria-modal="true" aria-labelledby="shopTitle"><section class="dialog shop-dialog"><div class="emoji">💎</div><h2 id="shopTitle">晶核外观商店</h2><p class="desc">击败 Boss 获得晶核，解锁新的霓虹主题。只改变外观，不影响游戏难度。</p><div class="shop-balance">当前晶核：<strong id="shopBalance">0</strong> 💎</div><div class="shop-grid" id="shopGrid"></div><button type="button" class="action wide" id="closeShop">返回游戏</button></section></div>
+<div class="backdrop" id="questBackdrop" role="dialog" aria-modal="true" aria-labelledby="questTitle"><section class="dialog meta-dialog"><div class="emoji">📋</div><h2 id="questTitle">每日任务</h2><p class="desc" id="questIntro">完成挑战，领取每日晶核。任务每天刷新。</p><div class="quest-reset" id="questReset">📅 今日任务 · 每项奖励 1 晶核</div><div class="quest-list" id="questList"></div><button type="button" class="action wide" id="closeQuests">继续挑战</button></section></div>
+<div class="backdrop" id="profileBackdrop" role="dialog" aria-modal="true" aria-labelledby="profileTitle"><section class="dialog meta-dialog profile-dialog"><div class="emoji">📊</div><h2 id="profileTitle">玩家档案</h2><p class="desc">本设备上的个人战绩与最近挑战记录。</p><div class="profile-stats" id="profileStats"></div><h3 class="history-title">最近 8 局</h3><div class="history-list" id="historyList"></div><button type="button" class="action wide" id="closeProfile">返回游戏</button></section></div>
+<div class="toast" id="toast" role="status"></div>
+<script src="engine.js"></script>
+<script src="campaign.js"></script>
+<script src="game.js"></script>
+<script src="tutorial.js"></script>
+</body>
+</html>
