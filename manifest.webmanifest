@@ -1,0 +1,31 @@
+{
+  "name": "临界点 · 爆爆冒险岛",
+  "short_name": "临界点",
+  "description": "卡通连锁爆炸小游戏 · 五岛冒险 · 好友挑战成绩卡 · 每日挑战",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#86dcff",
+  "theme_color": "#78d8ff",
+  "icons": [
+    {
+      "src": "assets/critical-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/critical-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/critical-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
