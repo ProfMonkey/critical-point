@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>临界点｜公测数据分析台 · v2.4</title>
+<style>
+:root{font-family:ui-rounded,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;color:#49311c;background:#a6e4ff}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:linear-gradient(180deg,#82d8ff 0%,#c1efff 32%,#d7f5c7 100%);padding:28px 14px 80px}
+.wrap{max-width:1010px;margin:auto}
+header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:22px}
+h1{font-size:clamp(28px,5vw,44px);color:#fff;margin:3px 0 4px;text-shadow:0 4px 0 #8b5b31,0 6px 12px #5992a5;line-height:1.18;letter-spacing:-.03em}
+.eyebrow{font-weight:950;color:#348b68;font-size:12px;letter-spacing:2px}
+.subtitle{font-size:13px;line-height:1.8;color:#546640;margin:7px 0}
+a.back{padding:10px 16px;color:#5d4328;background:#fff6c7;text-decoration:none;border:3px solid #fff;border-radius:18px;box-shadow:0 4px 0 #cca764;font-size:12px;font-weight:900;white-space:nowrap}
+.shell{border:4px solid #fff;border-radius:24px;padding:20px;background:#fff9e8;box-shadow:0 7px 0 #78bd52,0 18px 35px #2e7b8738;margin-bottom:18px}
+.upload{border:3px dashed #75cb8e;border-radius:20px;background:linear-gradient(130deg,#f0ffe4,#e5f9ff);padding:24px;text-align:center;cursor:pointer;transition:transform .15s,background .15s}
+.upload:hover,.upload.drag{transform:translateY(-2px);background:#dcffdf}
+.upload strong,.upload small{display:block}.upload strong{font-size:19px;margin:4px 0}.upload small{font-size:12px;color:#5b865b;margin:8px 0 15px;line-height:1.8}
+.upload-icon{font-size:36px}
+.btn{border:2px solid #fff;border-radius:12px;background:linear-gradient(180deg,#ffcf65,#ffad3d);color:#5e381d;font-family:inherit;font-weight:900;font-size:13px;padding:11px 14px;cursor:pointer;box-shadow:0 4px 0 #ce852d}
+.btn.alt{background:linear-gradient(180deg,#b8f7a9,#83d772);box-shadow:0 4px 0 #5aa455}
+.btn.secondary{background:#fff;border-color:#e8dbb1;box-shadow:0 3px 0 #d4c598}
+button:focus-visible,a:focus-visible,.upload:focus-visible{outline:4px solid #ff8d55;outline-offset:3px}
+.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:17px}
+.row span{font-size:12px;color:#967653}
+#status{font-size:12px;line-height:1.6;color:#477a52;margin-top:10px;min-height:18px;white-space:pre-line}
+#status.error{color:#c54137}
+.fine{color:#836b4e;font-size:12px;line-height:1.8;margin:14px 0 0}
+h2{font-size:19px;margin:0 0 14px;color:#61412b}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.metric{border:3px solid #fff;border-radius:17px;background:linear-gradient(160deg,#e8ffcd,#fff5b9);box-shadow:0 5px 0 #c7d78f;padding:14px;text-align:center;min-width:0}
+.metric:nth-child(even){background:linear-gradient(160deg,#d3f3ff,#d2eaff);box-shadow:0 5px 0 #b2cee7}
+.metric b{display:block;font-size:clamp(21px,3vw,31px);letter-spacing:-.025em;color:#d85330}
+.metric small{font-size:11px;color:#785e42;font-weight:800}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.hint{font-size:12px;color:#847155;margin:-5px 0 13px;line-height:1.65}
+.empty{color:#8e795f;text-align:center;font-size:13px;padding:18px 8px}
+.bar-row{display:grid;grid-template-columns:82px 1fr 55px;gap:8px;align-items:center;margin:11px 0;font-size:12px;font-weight:800}
+.track{height:15px;border-radius:999px;background:#e8dcbf;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#ffc858,#ef6e48);border-radius:999px}
+.fill.good{background:linear-gradient(90deg,#7dda7f,#38b88b)}
+.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:600px;font-size:12px}
+th,td{text-align:left;padding:11px;border-bottom:1px solid #e8dbb9}th{background:#fbeabf;color:#79502e;white-space:nowrap}tr:last-child td{border-bottom:0}
+.pill{border-radius:999px;padding:4px 9px;font-weight:900;background:#ddf5cc;color:#497b33;white-space:nowrap}
+.pill.warn{background:#ffe1c5;color:#a1512b}.pill.bad{background:#ffd6d0;color:#bc4337}
+.note{background:linear-gradient(120deg,#edffd5,#fff4d4);border:2px solid #fff;border-radius:14px;padding:13px;margin:10px 0;font-size:12px;line-height:1.6;color:#5a5537}
+.footer{text-align:center;color:#6b7655;font-size:11px;padding:9px;line-height:1.7}
+@media(max-width:690px){body{padding:17px 9px 60px}.shell{padding:15px;border-radius:19px}.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.metric:last-child{grid-column:span 2}a.back{font-size:11px}.bar-row{grid-template-columns:76px 1fr 47px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body><main class="wrap">
+<header><div><div class="eyebrow">🐒 PROFMONKEY / PLAYTEST INSIGHTS</div><h1>💥 公测数据分析台</h1><p class="subtitle">把朋友自愿导出的试玩 JSON 放进来，找到真正需要修的关卡。</p></div><a class="back" href="./index.html">← 返回游戏</a></header>
+<section class="shell"><h2>📂 导入测试报告</h2><label class="upload" id="drop" for="files" role="button" tabindex="0"><span class="upload-icon">🗂️</span><strong>拖入或选择多个 JSON 文件</strong><small>在游戏内「公测反馈」→「测试数据」→「导出 JSON」<br>支持 v2.2、v2.3、v2.4 格式。每份报告都只在本设备解析。</small><span class="btn alt">选择测试报告</span><input id="files" type="file" accept=".json,application/json" multiple hidden></label><div class="row"><button type="button" id="demo" class="btn">✨ 加载演示数据</button><button type="button" id="csv" class="btn secondary" disabled>📊 导出关卡统计 CSV</button><button type="button" id="reset" class="btn secondary">清空报告</button><span id="filesLabel">当前尚未导入报告</span></div><div id="status" aria-live="polite"></div><p class="fine">🔒 隐私说明：本页面不联网、不上传文件、不使用统计 SDK。演示数据会有明显标记。真人报告来自用户主动导出，不能当作真实用户总量，也不能凭本机记录计算严格的留存率。</p></section>
+<section class="shell"><h2>📊 试玩概览 <span id="demoFlag" style="font-size:12px;color:#ca6935"></span></h2><div class="grid">
+<div class="metric"><b id="mFiles">0</b><small>有效报告文件</small></div><div class="metric"><b id="mDone">0</b><small>已完成对局</small></div><div class="metric"><b id="mTime">—</b><small>完成局时长中位数</small></div><div class="metric"><b id="mWin">—</b><small>闯关成功率*</small></div><div class="metric"><b id="mRating">—</b><small>趣味评分均值</small></div></div><p class="fine">* 闯关成功率 = 已结束且有胜负结果的闯关局中，胜利局所占比例。退出局不混入这个分母。</p></section>
+<div class="two"><section class="shell"><h2>🎮 各模式试玩次数</h2><p class="hint">只统计已完成对局。数字反映上传的局数，不是活跃人数。</p><div id="modes" class="empty">等待导入数据</div></section>
+<section class="shell"><h2>💬 玩家难度评价</h2><p class="hint">只统计玩家主动填写的反馈；未评价的用户不能当成满意。</p><div id="difficulty" class="empty">等待导入数据</div></section></div>
+<section class="shell"><h2>🧭 哪些关卡需要优化？</h2><p class="hint">至少有 3 局有效胜负记录的关卡才会评估失败率。1～2步通关将被单独标记，因为你此前特别强调它们体验太短。</p><div class="table-wrap"><table><thead><tr><th>关卡</th><th>已结束局</th><th>成功率</th><th>操作数中位数</th><th>1～2步通关</th><th>建议</th></tr></thead><tbody id="levels"><tr><td colspan="6">导入报告后显示</td></tr></tbody></table></div></section>
+<section class="shell"><h2>🧪 公测下一轮怎么安排</h2><div id="advice"><p class="empty">导入报告后，会根据样本量、通关率和操作步数给出优先验证的关卡。</p></div></section>
+<footer class="footer">临界点 v2.4 · 本地离线分析 · 原始用户评论不会被发送、导出或自动公开</footer>
+</main><script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id);
+const modeName={campaign:'闯关',classic:'经典',daily:'每日',frenzy:'狂热',blitz:'极速',overload:'超载'};
+let records=[],demo=false;
+const n=v=>typeof v==='number'&&Number.isFinite(v)?v:typeof v==='string'&&v.trim()!==''&&Number.isFinite(Number(v))?Number(v):null;
+const med=arr=>{if(!arr.length)return null;const a=arr.slice().sort((x,y)=>x-y),i=Math.floor(a.length/2);return a.length%2?a[i]:(a[i-1]+a[i])/2};
+const format=(v,d=0)=>v==null?'—':Number(v).toFixed(d);
+const pct=(a,b)=>b?Math.round(a*100/b)+'%':'—';
+const validRun=r=>r&&typeof r==='object'&&['finished','abandoned'].includes(r.outcome)&&typeof r.mode==='string'&&r.mode.length<60&&n(r.actions)!==null&&n(r.actions)>=0&&n(r.actions)<50000;
+const validNote=r=>r&&typeof r==='object'&&n(r.stars)!==null&&n(r.stars)>=1&&n(r.stars)<=5;
+function notify(message,error=false){$('status').textContent=message;$('status').classList.toggle('error',error)}
+function parse(obj,filename){if(!obj||typeof obj!=='object'||Array.isArray(obj))throw Error('文件不是报告对象');
+  let data=obj;if(!Array.isArray(data.runs)&&obj.playtest&&typeof obj.playtest==='object')data=obj.playtest;
+  if(!Array.isArray(data.runs)||!Array.isArray(data.notes))throw Error('缺少 runs 或 notes 数组');
+  if(data.runs.length>10000||data.notes.length>5000)throw Error('报告体积或记录数异常');
+  const runs=data.runs.filter(validRun).map(r=>({mode:r.mode,level:Number.isInteger(n(r.level))?n(r.level):null,actions:n(r.actions),durationSec:n(r.durationSec),won:r.won===true?true:r.won===false?false:null,outcome:r.outcome,score:n(r.score),date:typeof r.date==='string'?r.date:''}));
+  const notes=data.notes.filter(validNote).map(r=>({stars:n(r.stars),difficulty:['easy','okay','hard'].includes(r.difficulty)?r.difficulty:'unknown',category:typeof r.category==='string'?r.category.slice(0,30):'',date:typeof r.date==='string'?r.date:''}));
+  return {filename,runs,notes,version:String(obj.appVersion||obj.version||'?'),exportedAt:String(obj.exportedAt||'')};
+}
+async function importFiles(files){const errors=[];let added=0;demo=false;
+ for(const file of files){try{if(file.size>3*1024*1024)throw Error('单文件不超过3MB');const txt=await file.text();const id=await hash(txt);if(records.some(r=>r.id===id))continue;const parsed=parse(JSON.parse(txt),file.name);records.push({...parsed,id});added++}catch(e){errors.push(file.name+': '+e.message)}}
+ notify(`新导入 ${added} 份，当前共 ${records.length} 份有效报告。`+(errors.length?'\n未导入：'+errors.join('；'):''),errors.length>0);render();}
+async function hash(s){if(globalThis.crypto?.subtle){const x=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(x),b=>b.toString(16).padStart(2,'0')).join('')}let h=2166136261;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),16777619)}return String(h>>>0)+':'+s.length}
+function renderBars(target,list,total,good=false){const root=$(target);root.replaceChildren();if(!list.length){root.className='empty';root.textContent='暂无有效数据';return}root.className='';for(const [name,count] of list){const row=document.createElement('div');row.className='bar-row';const lbl=document.createElement('span');lbl.textContent=name;const bar=document.createElement('div');bar.className='track';const fill=document.createElement('div');fill.className='fill'+(good?' good':'');fill.style.width=Math.round(count*100/Math.max(total,1))+'%';bar.append(fill);const val=document.createElement('span');val.textContent=String(count);row.append(lbl,bar,val);root.append(row)}}
+function render(){const runs=records.flatMap(x=>x.runs),done=runs.filter(x=>x.outcome==='finished'),campaign=done.filter(x=>x.mode==='campaign'&&x.won!==null),notes=records.flatMap(x=>x.notes);
+ $('mFiles').textContent=records.length;$('mDone').textContent=done.length;
+ const durations=done.map(r=>r.durationSec).filter(x=>x!==null&&x>0&&x<86400);
+ $('mTime').textContent=durations.length?Math.round(med(durations))+' 秒':'—';$('mWin').textContent=pct(campaign.filter(x=>x.won).length,campaign.length);$('mRating').textContent=notes.length?format(notes.reduce((a,b)=>a+b.stars,0)/notes.length,1)+'/5':'—';
+ $('demoFlag').textContent=demo?'（⚠️ 仅演示数据，不是真实玩家）':'';
+ $('filesLabel').textContent=demo?'当前仅载入模拟样本':`${records.length} 份报告 · ${runs.length} 条对局 · ${notes.length} 条评价`;
+ $('csv').disabled=!records.length;
+ const counts=new Map();for(const r of done)counts.set(modeName[r.mode]||r.mode,(counts.get(modeName[r.mode]||r.mode)||0)+1);renderBars('modes',[...counts].sort((a,b)=>b[1]-a[1]),done.length);
+ const difficult=['hard','okay','easy'];const names={hard:'太难',okay:'刚刚好',easy:'太简单'};
+ renderBars('difficulty',difficult.map(k=>[names[k],notes.filter(x=>x.difficulty===k).length]),notes.length,true);
+ const tbody=$('levels');tbody.replaceChildren();let lines=[];
+ for(let level=1;level<=29;level++){
+  const rr=campaign.filter(r=>r.level===level);if(!rr.length)continue;
+  const wins=rr.filter(r=>r.won===true),short=wins.filter(r=>r.actions<=2).length;
+  const win=rr.length?Math.round(wins.length*100/rr.length):null,steps=med(rr.map(r=>r.actions));
+  let priority='继续观察',levelClass='';
+  if(rr.length<3){priority='样本不足';}
+  else if(short>=2||short>=rr.length*0.3){priority='⚠️ 通关太快';levelClass='warn'}
+  else if(win<35){priority='❗ 可能偏难';levelClass='bad'}
+  else if(win>90&&steps!==null&&steps<4){priority='⚠️ 可能偏简单';levelClass='warn'}
+  lines.push({level,n:rr.length,win,steps,short,priority,levelClass});
+ }
+ lines.sort((a,b)=>Number(b.levelClass==='bad')-Number(a.levelClass==='bad')||Number(b.levelClass==='warn')-Number(a.levelClass==='warn')||b.n-a.n);
+ if(!lines.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=6;td.textContent='暂时没有有效的闯关结算样本';tr.append(td);tbody.append(tr)}
+ for(const r of lines){const tr=document.createElement('tr');for(const v of [`第${r.level}关`,r.n,pct(r.win,100),format(r.steps,1),r.short]){const td=document.createElement('td');td.textContent=v;tr.append(td)}const td=document.createElement('td'),sp=document.createElement('span');sp.className='pill '+r.levelClass;sp.textContent=r.priority;td.append(sp);tr.append(td);tbody.append(tr)}
+ const advice=$('advice');advice.replaceChildren();
+ const add=t=>{let d=document.createElement('div');d.className='note';d.textContent=t;advice.append(d)};
+ if(demo)add('⚠️ 当前是程序生成的模拟样本，仅用于检查分析页面，不能用于真实上线判断。');
+ if(records.length<5)add('建议先收集至少5位独立测试者主动导出的报告；相同玩家多次导出可能重复计算，需要人工确认。');
+ if(done.length<20)add('已完成对局少于20局，当前结论不稳定。可先安排每人玩3局，再观察共性问题。');
+ const trouble=lines.filter(r=>r.n>=3&&r.levelClass).slice(0,4);
+ if(trouble.length)add('优先复测：'+trouble.map(x=>`第${x.level}关（${x.priority}，${x.n}局）`).join('、')+'。');
+ if(notes.length&&notes.filter(x=>x.difficulty==='hard').length/notes.length>=.4)add('至少40%的主动反馈认为游戏太难：优先检查超载模式、规则教学和前5关。');
+ if(!advice.childNodes.length)add('当前没有发现稳定的共性信号。继续招募不同水平的试玩者，并逐条核查主观评价。');
+ window.reportLevelData=lines;
+}
+function csvEscape(v){return '"'+String(v??'').replaceAll('"','""')+'"'}
+function exportCsv(){let head=['关卡','有效完成局数','通关率百分比','操作数中位数','1~2步通关局数','建议'];let rows=(window.reportLevelData||[]).map(r=>[r.level,r.n,r.win,r.steps,r.short,r.priority]);let csv='\uFEFF'+[head,...rows].map(row=>row.map(csvEscape).join(',')).join('\r\n');const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='critical-point-v24-level-summary.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+const chooser=$('files'),zone=$('drop');chooser.addEventListener('change',()=>{importFiles(chooser.files);chooser.value=''});
+zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag')});zone.addEventListener('dragleave',()=>zone.classList.remove('drag'));
+zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag');importFiles(e.dataTransfer.files)});
+zone.addEventListener('keydown',e=>{if(e.target===zone&&(e.key==='Enter'||e.key===' ')){e.preventDefault();chooser.click()}});
+$('reset').addEventListener('click',()=>{records=[];demo=false;render();notify('报告已经从这个页面清空。磁盘文件没有被删除。')});
+$('csv').addEventListener('click',exportCsv);
+$('demo').addEventListener('click',()=>{
+ const now=new Date().toISOString();const runs=[],notes=[];
+ for(let i=0;i<64;i++){
+   const level=1+(i%13),mode=i%5===0?'overload':i%4===0?'classic':'campaign',won=level===9?i%5===0:level===5?i%3!==0:i%4!==0;
+   runs.push({date:now,mode,level:mode==='campaign'?level:null,actions:level===3?2:4+i%5,durationSec:25+i*3,outcome:'finished',won:mode==='campaign'?won:null,score:100+i*22,chain:1+i%6,stars:won?1+(i%3):0});
+ }
+ for(let i=0;i<19;i++)notes.push({date:now,stars:2+i%4,difficulty:i%3===0?'hard':i%3===1?'okay':'easy',category:'难度',mode:'campaign',level:1+i%10});
+ records=[{id:'demo',filename:'示例样本.json',runs,notes,version:'演示'}];demo=true;render();notify('⚠️ 已加载模拟演示样本。它不代表真实玩家，也不能用于上线决策。');
+});
+render();
+})();
+</script></body></html>
