@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#78d8ff">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="assets/critical-logo.svg" type="image/svg+xml">
-  <title>临界点 v2.4 · 公测闭环版 | ProfMonkey</title>
+  <title>临界点 v2.3 · 好友挑战公测版 | ProfMonkey</title>
 <style>
 :root{color-scheme:dark;--bg:#0a1020;--stroke:rgba(196,217,255,.15);--text:#ebf3ff;--muted:#96a9c8;--accent:#ffc36e;--panel:#142139}
 *{box-sizing:border-box}
@@ -262,7 +262,7 @@ h1 span{display:inline-block;margin-left:10px;font-size:.53em;vertical-align:21%
 .toast{border:1px solid rgba(255,104,195,.62);background:#33173f;color:#fff}
 button:focus-visible{outline:3px solid #61fff0;outline-offset:3px}
 
-/* 自动演示：完整模拟真实规则引擎，同步展示能量变化 */
+/* 分步教学：完整模拟真实规则引擎，同步展示能量变化 */
 .tutorial-backdrop{z-index:60;padding:12px}
 .tutorial-dialog{width:min(100%,438px);max-height:min(95dvh,860px);overflow-y:auto;text-align:left;padding:18px clamp(14px,5vw,25px) 18px;position:relative}
 .tutorial-tag{display:flex;align-items:center;gap:7px;font-size:10px;font-weight:900;color:#83fce9;letter-spacing:.13em;margin-bottom:7px}
@@ -1257,10 +1257,38 @@ body[data-pm-accessory="legend"] .home-hero:after{content:'✦ ✧ ✨ ✦';posi
 .beta-nudge-later{background:#fff6d8;color:#78523c;box-shadow:0 3px 0 #c9af79}
 @media(max-width:360px){.beta-nudge{flex-wrap:wrap}.beta-nudge .copy{flex-basis:100%}}
 </style>
+<style>
+/* v2.5 · Candy Crush-like onboarding and smoother difficulty pacing */
+.v25-difficulty{margin:0 0 12px;padding:11px 12px;background:linear-gradient(130deg,#fff6c9,#e1f8dc);border:2px solid #fff;border-radius:15px;box-shadow:0 4px 0 #aacb8d;color:#735229}
+.v25-difficulty>span{display:block;font-size:12px;font-weight:850;margin-bottom:9px;line-height:1.4}
+.v25-difficulty>div{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.v25-difficulty button{border:2px solid white;background:#fffdf0;border-radius:11px;color:#735329;padding:9px 7px;font-size:12px;font-weight:900;cursor:pointer;box-shadow:0 3px 0 #dbd2a1;min-height:41px}
+.v25-difficulty button[aria-pressed="true"]{background:linear-gradient(#ffde6f,#ffac48);border-color:#fff9ca;box-shadow:0 3px 0 #d48d31;color:#572c20}
+.v25-goal-card{border:2px solid #fff1bb;background:linear-gradient(155deg,#fffced,#fff5d2);border-radius:14px;padding:10px 12px;margin:9px 0;box-shadow:0 3px 0 #d9c58f;color:#6a482d}
+.v25-goal-title{display:flex;gap:7px;align-items:center;font-size:14px;color:#b35425}
+.v25-goal-title strong{line-height:1.35}
+.v25-goal-tip{font-size:12px;line-height:1.6;margin-top:5px;font-weight:700}
+.v25-goal-foot{display:block;font-size:10px;color:#8b774e;margin-top:7px;line-height:1.5}
+.v25-guide-actions{grid-template-columns:.85fr 1.6fr}
+.v25-tutorial-again{display:block;margin:10px auto 0;border:none;background:transparent;color:#865d35;text-decoration:underline;text-underline-offset:3px;cursor:pointer;font-size:12px;font-weight:800;padding:8px 12px}
+.v25-guide-actions .action{font-size:clamp(12px,3vw,14px);min-height:50px}
+.demo-cell{padding:0;appearance:none;font-family:inherit;cursor:default}
+.demo-cell.v25-clickable{cursor:pointer;animation:v25Beacon 1.5s ease-in-out infinite;outline:3px solid #f6a400;outline-offset:2px;z-index:2}
+.demo-cell.v25-clickable:before{content:'👆';position:absolute;top:-25px;right:-15px;font-size:25px;filter:drop-shadow(0 2px 0 #fff);z-index:3;animation:v25Hand 1.8s infinite}
+@keyframes v25Beacon{0%,100%{box-shadow:0 0 0 3px #ffe381,0 0 12px #ffc947}50%{box-shadow:0 0 0 6px #ffba2a,0 0 21px #ff9a2a}}
+@keyframes v25Hand{0%,100%{transform:translate(0,0)}45%{transform:translate(-6px,7px)}}
+.tutorial-dots i{width:min(23px,6vw);height:7px}
+.tutorial-outcome{min-height:57px;font-size:13px;line-height:1.7}
+.tutorial-meter{font-size:13px;line-height:1.6}
+.tutorial-small{font-size:11px}
+#tutorialBackdrop .tutorial-dialog{max-height:calc(100dvh - 20px);overflow:auto;overscroll-behavior:contain}
+@media(max-width:390px){.v25-difficulty{padding:8px}.v25-difficulty button{font-size:10.5px;padding:8px 4px}.v25-guide-actions .action{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.demo-cell.v25-clickable,.demo-cell.v25-clickable:before{animation:none}}
+</style>
 </head>
 <body>
 <main class="shell">
-  <div class="brand"><span class="brand-left"><span class="monkey">🐒</span> PROFMONKEY / MINI GAME</span><span class="brand-tools"><span class="version">V 2.4</span><button type="button" id="homeBack" class="home-back" aria-label="返回冒险首页">⌂ 首页</button></span></div>
+  <div class="brand"><span class="brand-left"><span class="monkey">🐒</span> PROFMONKEY / MINI GAME</span><span class="brand-tools"><span class="version">V 2.5</span><button type="button" id="homeBack" class="home-back" aria-label="返回冒险首页">⌂ 首页</button></span></div>
   <header><h1>临界<em>点</em><span aria-hidden="true">⚡</span></h1><p class="tagline">点一下数字 <b>+1</b>，凑到 <b id="headlineThreshold">4</b> 就爆炸。<br>一次点击，引爆整个棋盘。</p></header>
   <details class="fold game-menu" id="gameMenu"><summary><span class="fold-emoji">🎮</span><span><strong id="currentModeName">经典模式</strong><small>切换模式 · 每日任务 · 收集外观</small></span><span class="fold-chevron">⌄</span></summary><div class="fold-content">
   <nav class="modes" role="group" aria-label="选择游戏模式">
@@ -1286,7 +1314,16 @@ body[data-pm-accessory="legend"] .home-hero:after{content:'✦ ✧ ✨ ✦';posi
   </div></details>
   <section class="world-stage" id="worldStage" aria-label="本关冒险区域" hidden><div class="world-stage-art" id="worldStageArt" aria-hidden="true"></div><div class="world-stage-copy"><span id="worldStageTag">冒险第一区</span><strong id="worldStageName">青草试炼岛</strong><small id="worldStageTip">新的冒险即将开始</small></div><div class="world-stage-face" id="worldStageFace" aria-hidden="true"></div></section>
   <section class="mission" id="mission" hidden aria-label="闯关任务">
-    <div class="mission-head"><div><small id="missionIndex">关卡 1 / 26</small><h3 id="missionName">第一声爆炸</h3></div><button type="button" id="levelPicker">🗺 选关</button></div>
+    <div class="v25-difficulty" id="v25DifficultyBar" role="group" aria-label="闯关难度">
+      <span>🎯 像消消乐一样，先轻松学会，再慢慢提高</span>
+      <div><button type="button" data-campaign-difficulty="relaxed" aria-pressed="true">🌼 轻松冒险</button><button type="button" data-campaign-difficulty="challenge" aria-pressed="false">🔥 经典挑战</button></div>
+    </div>
+    <div class="mission-head"><div><small id="missionIndex">关卡 1 / 29</small><h3 id="missionName">第一声爆炸</h3></div><button type="button" id="levelPicker">🗺 选关</button></div>
+    <div class="v25-goal-card" id="v25GoalCard" hidden>
+      <div class="v25-goal-title"><span id="v25GoalIcon">🌱</span><strong id="v25GoalText">本关只要完成目标就能通关</strong></div>
+      <div id="v25GoalTip" class="v25-goal-tip">点击数字3，凑成4，引爆连锁！</div>
+      <small class="v25-goal-foot">✨ 先拿1星过关；2星、3星是自愿挑战，不会卡住后续冒险。</small>
+    </div>
     <p class="mission-sub" id="missionSub">先试试让火花连起来</p>
     <div class="boss-panel" id="bossPanel" hidden>
       <div class="boss-head"><span class="boss-avatar" id="bossIcon">👾</span><div class="boss-title"><strong id="bossName">Boss</strong><small>CORE SHIELD / 核心护盾</small></div><b id="bossHpText">3 / 3</b></div>
@@ -1308,14 +1345,14 @@ body[data-pm-accessory="legend"] .home-hero:after{content:'✦ ✧ ✨ ✦';posi
       <button type="button" class="skill-button" data-skill="overcharge" aria-pressed="false"><span class="skill-icon">💥</span><span class="skill-copy"><strong>过载引爆</strong><small>指定格立即爆炸</small></span><b class="skill-count" id="skillOverchargeCount">可用 ×1</b></button>
       <button type="button" class="skill-button" data-skill="cool" aria-pressed="false"><span class="skill-icon">❄️</span><span class="skill-copy"><strong>紧急冷却</strong><small>数字降低 2</small></span><b class="skill-count" id="skillCoolCount">可用 ×1</b></button>
     </div>
-    <div class="skill-status" id="skillStatus" role="status" aria-live="polite">首次出现的技能会先自动演示。选择技能后，再点击棋盘中的目标格。</div>
+    <div class="skill-status" id="skillStatus" role="status" aria-live="polite">首次出现的技能会先分步教学。选择技能后，再点击棋盘中的目标格。</div>
     <button type="button" class="action trial-open-btn" id="openTrials">🧩 技能连携试炼 · 3 个战术谜题</button>
   </section>
   </div></details>
 <section class="board-card" id="boardCard" aria-label="六乘六数字棋盘"><div class="board" id="board" role="group" aria-label="点击任意格子数字加一"></div></section>
   <div class="msg" id="message" role="status" aria-live="polite">点击一个发光的 3，看看能连炸几次！</div>
   <div class="actions"><button class="action" type="button" id="undo" disabled>↶ 撤回 (1)</button><button class="action" type="button" id="restart">↻ 重玩</button><button class="action primary" type="button" id="newBoard">✦ 新棋盘</button></div>
-  <div class="utilities"><button class="utility" type="button" id="hint">💡 提示一次</button><button class="utility" type="button" id="achievements">🏅 成就 <span id="badgeCount">0/17</span></button><button class="utility" type="button" id="help">▶ 演示规则</button><button class="utility" type="button" id="sound" aria-pressed="false">🔇 音效关闭</button><button class="utility" type="button" id="vibration" aria-pressed="false">📴 震动关</button><button class="utility" type="button" id="fxMode" aria-pressed="true" title="关闭高强度爆炸粒子动画，适合低性能手机">✨ 特效：炫酷</button></div>
+  <div class="utilities"><button class="utility" type="button" id="hint">💡 提示一次</button><button class="utility" type="button" id="achievements">🏅 成就 <span id="badgeCount">0/17</span></button><button class="utility" type="button" id="help">📖 规则教学（慢速）</button><button class="utility" type="button" id="sound" aria-pressed="false">🔇 音效关闭</button><button class="utility" type="button" id="vibration" aria-pressed="false">📴 震动关</button><button class="utility" type="button" id="fxMode" aria-pressed="true" title="关闭高强度爆炸粒子动画，适合低性能手机">✨ 特效：炫酷</button></div>
   <button class="utility bottom-share" type="button" id="shareTop">↗ 分享游戏给朋友</button>
   <div class="foot">数字达到 <b id="ruleThreshold">4</b> 就爆炸，向四周各传 1 · 连锁越深分数越高</div>
   <button type="button" id="gameSave" class="save-ingame-btn">💾 备份 / 恢复游戏进度</button>
@@ -1359,7 +1396,7 @@ body[data-pm-accessory="legend"] .home-hero:after{content:'✦ ✧ ✨ ✦';posi
         <button class="beta-nudge-go" type="button" id="betaNudgeGo">去评价</button><button class="beta-nudge-later" type="button" id="betaNudgeLater">稍后</button>
       </div>
       <button type="button" id="homeSave" class="save-home-btn" aria-label="备份或恢复游戏进度"><span aria-hidden="true">💾</span><span><strong>进度保险箱</strong><small>换浏览器、换版本也能迁移存档</small></span><span aria-hidden="true">➜</span></button>
-      <p class="home-tip">💡 首次出现新规则，先自动演示再开始操作</p>
+      <p class="home-tip">💡 新规则首次出现：先自己点击练习；看懂了再继续，不自动快进</p>
     </div>
     <div class="home-ground" aria-hidden="true"><span>🌼</span><span>🍀</span><span>🌼</span><span>🌿</span></div>
   </div>
@@ -1369,7 +1406,7 @@ body[data-pm-accessory="legend"] .home-hero:after{content:'✦ ✧ ✨ ✦';posi
 </div>
 <div class="backdrop" id="rulesBackdrop" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
   <section class="dialog rules"><div class="emoji">⚡</div><h2 id="rulesTitle">规则别背，直接看爆炸！</h2>
-    <p class="rules-hint">当前临界值：<b id="rulesThreshold">4</b>。选一个规则，棋盘会自己演示一次。<b>只要出现尚未学过的规则，就在开局前按顺序自动演示。</b></p>
+    <p class="rules-hint">当前临界值：<b id="rulesThreshold">4</b>。选择规则后会进入<strong>逐步练习</strong>：你来点下一步，没有计时，看清楚再继续。已学过的规则不会反复弹出，可在这里主动重看。</p>
     <div class="rules-demo-grid">
       <button type="button" class="rules-demo-btn" data-demo="base">💥 数字满格爆炸</button>
       <button type="button" class="rules-demo-btn" data-demo="chain">⚡ 连锁反应</button>
@@ -1398,7 +1435,7 @@ body[data-pm-accessory="legend"] .home-hero:after{content:'✦ ✧ ✨ ✦';posi
 </div>
 <div class="backdrop tutorial-backdrop" id="tutorialBackdrop" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
   <section class="dialog tutorial-dialog">
-    <div class="tutorial-tag"><span id="tutorialAutoplay">新机制解锁 · 自动演示</span><strong id="tutorialSequence" class="tutorial-sequence">本次新规则 1/1</strong></div>
+    <div class="tutorial-tag"><span id="tutorialAutoplay">新机制解锁 · 分步教学</span><strong id="tutorialSequence" class="tutorial-sequence">本次新规则 1/1</strong></div>
     <div class="tutorial-heading"><span class="tutorial-icon" id="tutorialIcon">💥</span><h2 id="tutorialTitle">满格爆炸</h2></div>
     <p class="tutorial-lead" id="tutorialLead">看一遍你就懂了。</p>
     <div class="tutorial-stage">
@@ -1408,8 +1445,9 @@ body[data-pm-accessory="legend"] .home-hero:after{content:'✦ ✧ ✨ ✦';posi
       <div class="tutorial-outcome" id="tutorialOutcome" role="status" aria-live="polite">演示马上开始…</div>
     </div>
     <div class="tutorial-dots" id="tutorialDots" aria-hidden="true"></div>
-    <div class="tutorial-actions"><button type="button" class="action" id="tutorialReplay">↻ 再演示一次</button><button type="button" class="action primary" id="tutorialStart">开始玩！⚡</button></div>
-    <p class="tutorial-small">每个新机制第一次出现时，开局前自动播放；不同规则会依次演示。<br>演示与真实对局隔离，不扣步数、不改关卡；忘记了可随时重播。</p>
+    <div class="tutorial-actions v25-guide-actions"><button type="button" class="action" id="tutorialReplay">↶ 上一步</button><button type="button" class="action primary" id="tutorialStart">下一步 →</button></div>
+    <button type="button" class="v25-tutorial-again" id="tutorialAgain">↻ 从头练一次</button>
+    <p class="tutorial-small">👆 <b>由你控制播放进度</b>：点「下一步」或点中间发光格试操作。没有倒计时，也不会自动跳过。<br>每种机制默认只教一次；以后想重看，可以点「📖 分步教学」。练习不扣真实步数。</p>
   </section>
 </div>
 <div class="backdrop" id="levelBackdrop" role="dialog" aria-modal="true" aria-labelledby="levelTitle"><section class="dialog level-dialog"><div class="emoji">🗺️</div><h2 id="levelTitle">冒险世界地图</h2><p class="desc" id="levelIntro">已解锁 1 / 29 关</p><div class="level-grid" id="levelGrid"></div><button type="button" class="action wide" id="closeLevels">返回</button></section></div>
@@ -1435,7 +1473,7 @@ body[data-pm-accessory="legend"] .home-hero:after{content:'✦ ✧ ✨ ✦';posi
 <div class="toast" id="toast" role="status"></div>
 <div class="backdrop trial-backdrop" id="trialBackdrop" role="dialog" aria-modal="true" aria-labelledby="trialTitle">
   <section class="dialog trial-dialog">
-    <div class="trial-head"><div><h2 id="trialTitle">🧩 技能连携试炼</h2><p>三道战术谜题。每道新规则都会先自动演示，演示不会影响真实对局。</p></div><button type="button" class="trial-close" id="trialClose" aria-label="关闭试炼">✕</button></div>
+    <div class="trial-head"><div><h2 id="trialTitle">🧩 技能连携试炼</h2><p>三道战术谜题。每道新规则都会先分步教学，演示不会影响真实对局。</p></div><button type="button" class="trial-close" id="trialClose" aria-label="关闭试炼">✕</button></div>
     <div id="trialMenu">
       <div class="trial-rules-note">挑战目标不是随便点出爆炸，而是按顺序使用技能。每道试炼首次通关奖励 <b>1 枚晶核</b>，每道只发一次。</div>
       <div class="trial-cards" id="trialCards"></div>
@@ -1666,6 +1704,25 @@ body[data-pm-accessory="legend"] .home-hero:after{content:'✦ ✧ ✨ ✦';posi
     const [star2,star3] = STAR_SCORE[x.id-1];
     return Object.freeze({...x,star2,star3});
   }));
+  // v2.5: 轻松冒险优先给玩家足够操作空间。保留旧版经典参数供自愿挑战。
+  // 数值按原始 29 关棋盘的可达性和不同策略模拟核对；不改种子、不改爆炸规则。
+  const FUN_TUNE = Object.freeze({
+     2:{target:4,moves:9}, 5:{target:6,moves:10}, 8:{target:1100,moves:12},
+    10:{target:6,moves:11}, 13:{target:6,moves:11},
+    16:{target:3,moves:11}, 20:{target:3,moves:14},
+    22:{target:5,moves:12}, 25:{target:3,moves:14},
+    26:{target:3,moves:15}, 27:{target:3,moves:14},
+    28:{target:3,moves:16}, 29:{target:4,moves:19}
+  });
+  const FUN_LEVELS = Object.freeze(LEVELS.map(l => {
+    const p=FUN_TUNE[l.id];if(!p)return l;
+    const adjusted={...l,...p};
+    if(l.boss)adjusted.boss=Object.freeze({...l.boss,hp:adjusted.target});
+    return Object.freeze(adjusted);
+  }));
+  const DIFFICULTY_KEY='profmonkey-critical-v25-adventure-difficulty';
+  function difficulty(){try{return localStorage.getItem(DIFFICULTY_KEY)==='challenge'?'challenge':'relaxed';}catch{return 'relaxed';}}
+  const activeLevels=()=>difficulty()==='challenge'?LEVELS:FUN_LEVELS;
   const TYPES = {score:{label:'总得分',unit:'分'},chain:{label:'最长连锁',unit:'层'},explosions:{label:'总爆炸数',unit:'次'},targets:{label:'累计引爆目标',unit:'个'},boss:{label:'Boss生命削减',unit:'格'}};
   function typesFor(level, engine) {
     const types = Array(engine.SIZE*engine.SIZE).fill(engine.TYPES.NORMAL);
@@ -1711,7 +1768,7 @@ body[data-pm-accessory="legend"] .home-hero:after{content:'✦ ✧ ✨ ✦';posi
     }
     return best;
   }
-  return {LEVELS,TYPES,typesFor,optionsFor,currentValue,goalText,starsFor,nextStarText,hint};
+  return {get LEVELS(){return activeLevels();}, CHALLENGE_LEVELS:LEVELS, FUN_LEVELS, difficulty, TYPES,typesFor,optionsFor,currentValue,goalText,starsFor,nextStarText,hint};
 });
 
 </script>
@@ -1728,7 +1785,7 @@ const configs = {
   classic: { name: '经典', moves: 12, desc: '12 次点击，尽可能打出高分', chip: '自由挑战' },
   frenzy: { name: '狂热', moves: 10, desc: '单次连锁达到 3 层，加 1 步（最多 3 次）', chip: '连锁续命' },
   daily: { name: '每日', moves: 12, desc: '当天固定同一初始棋盘，比拼得分', chip: '每日同盘' },
-  campaign: { name: '闯关', moves: 6, desc: '29 关逐渐变难；Boss 核心会显示生命条', chip: '29 关挑战' },
+  campaign: { name: '闯关', moves: 6, desc: '29关 · 新规则先练会 · 按你自己的节奏通关', chip: '循序渐进' },
   overload: { name: '超载', moves: 20, desc: '默认舒适：20 步、高能开局；可切换 16 步挑战', chip: '可选难度' },
   blitz: { name: '极速', moves: 999, seconds: 75, desc: '首次点击后开始计时，75 秒内尽情引爆', chip: '75 秒挑战' }
 };
@@ -2018,6 +2075,19 @@ function updateUI() {
   $('hint').disabled = busy || hintUsed || ended || (mode === 'blitz' ? timeLeft<=0 : movesLeft === 0);
   $('hint').textContent = hintUsed ? '💡 提示已用' : '💡 提示一次';
   $('extraInfo').textContent = mode === 'frenzy' ? `🔥 额外步数 ${bonusEarned}/3` : mode === 'campaign' ? '🏁 达标后继续冲三星' : mode === 'blitz' ? '⏱️ 首次点击开始计时' : (undoUsed ? '↶ 已使用撤回' : '↶ 可撤回 1 次');
+  // 关卡只突出当前胜利条件，避免把三星误当作过关要求。
+  const cg=$('v25GoalCard'), difficultyBar=$('v25DifficultyBar');
+  cg.hidden = mode!=='campaign';difficultyBar.hidden = mode!=='campaign';
+  document.querySelectorAll('[data-campaign-difficulty]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.campaignDifficulty===campaign.difficulty())));
+  if(mode==='campaign'){
+    const l=level();
+    const icons={score:'🏆',chain:'⚡',explosions:'💥',targets:'🎯',boss:'👾'};
+    $('v25GoalIcon').textContent=icons[l.goal]||'🌱';
+    $('v25GoalText').textContent=campaign.goalText(l);
+    const tip={score:'先点数字接近临界值的格子；多次连爆可以轻松加分。',chain:'一击触发连续几层爆炸才算！找周围数字较高的地方。',explosions:'不用一次完成，爆炸次数可以整局累计。',targets:'金色框里的数字真正爆炸才算完成，不是点中就算。',boss:'优先点红紫色 Boss 核心（一次 +2）；核心每次爆炸掉 1 格血。'}[l.goal];
+    const rule=l.specials?.d?.length?'🟣 紫色 ✕ 向四个斜角传能量；普通格仍向上下左右传。':l.specials?.r?.length?'🧱 石墙不能点击，也不会接收能量。':l.specials?.a?.length?'🔷 蓝色 ×2 格主动点击时增加两点能量。':l.threshold>=5?`🔢 本关数字达到 ${l.threshold} 才爆炸。`:'';
+    $('v25GoalTip').textContent=(rule?rule+' ':'')+tip;
+  }
   $('overloadSettings').hidden = mode!=='overload';
   if(mode==='overload') {
     document.querySelectorAll('[data-overload-difficulty]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.overloadDifficulty===overloadDifficulty)));
@@ -2417,6 +2487,13 @@ document.querySelectorAll('[data-overload-difficulty]').forEach(b=>b.addEventLis
   try{localStorage.setItem('profmonkey-critical-v06-overload',overloadDifficulty);}catch{}
   if(mode==='overload'){init(true);toast(overloadDifficulty==='easy'?'已切换舒适难度：20 步高能棋盘':'已切换挑战难度：16 步普通棋盘');}
 }));
+document.querySelectorAll('[data-campaign-difficulty]').forEach(b=>b.addEventListener('click',()=>{
+  const next=b.dataset.campaignDifficulty;
+  if(next===campaign.difficulty())return;
+  try{localStorage.setItem('profmonkey-critical-v25-adventure-difficulty',next);}catch{}
+  if(mode==='campaign')init(false);else updateUI();
+  toast(next==='relaxed'?'已切换轻松冒险：规则不变，目标更友好、步数更宽裕':'已切换经典挑战：恢复旧版高难度目标');
+}));
 $('achievements').addEventListener('click',openBadges);
 $('openShop').addEventListener('click',openShop);
 $('openQuests').addEventListener('click',openDailyQuests);
@@ -2443,12 +2520,12 @@ init(true);
 
 </script>
 <script>
-/* 临界点 v0.9 — 新机制逐条自动演示，新增斜向爆炸教学；教学不修改真实对局。 */
-(() => {
-  'use strict';
-  const E = window.CriticalEngine, C = window.CriticalCampaign;
-  const SIZE = E.SIZE, CENTER = 14, $ = id => document.getElementById(id);
-  const KEY = 'profmonkey-critical-v07-tutorial-', seenNow = new Set();
+/* 临界点 v2.5 — 消消乐式单规则引导：玩家主动推进，不自动快进。 */
+(()=>{
+'use strict';
+const E=window.CriticalEngine, C=window.CriticalCampaign;
+const SIZE=E.SIZE,CENTER=14,$=id=>document.getElementById(id);
+const KEY='profmonkey-critical-v07-tutorial-',sessionSeen=new Set();
   const DATA = {
     quests: {icon:'📋',title:'每日任务 · 完成就领奖',lead:'每天有三项小挑战：完成 2 局、打出 3 层连锁、单局达到 500 分。',end:'对局结束后会自动记录进度；任务亮起完成状态后，打开「每日任务」点击领取即可获得晶核。每天刷新，已领取奖励不会重复发放。',meter:'📋 3 项任务 · 每项 +1 晶核'},
     skills: {icon:'⚔️',title:'战术技能 · 先选技能再选格',lead:'每局有三种技能，每种只能用一次；使用技能会消耗一次点击。先按技能按钮，再点棋盘目标格。',end:'技能是战术选择，不会自动施放。选错了可以再次点击同一个技能按钮取消；紧急冷却只能选数字 2 或更高的格子。',meter:'⚔️ 3 种技能 · 各 1 次 · 每次消耗 1 步'},
@@ -2476,33 +2553,29 @@ init(true);
     overload: {icon:'🚀',title:'超载：数字达到 6 才爆',lead:'舒适版 20 步高能开局；挑战版 16 步普通开局。',end:'这盘要凑到 6 才爆炸；推荐先用「舒适」练习。切换难度会换一张棋盘。',meter:'✨ 舒适：20 步 / 🔥 挑战：16 步'},
     overloadHard: {icon:'🔥',title:'挑战难度：步数更少',lead:'从舒适版 20 步切换到 16 步，初始数字也更分散。',end:'不是新数字规则，只是更严格的挑战。第一次尝试建议别追求完美。',meter:'🔥 挑战难度：16 步'}
   };
-  const cells = [], BOARD = $('tutorialBoard');
-  let queue = [], index = 0, current = null, automatic = false, playing = false,
-      run = 0, wait = null, wake = null, nextFocus = null, activeScope = '';
-  const wasSeen = id => {if(seenNow.has(id))return true;try{return localStorage.getItem(KEY+id)==='1';}catch{return false;}};
-  const record = id => {seenNow.add(id);try{localStorage.setItem(KEY+id,'1');}catch{}};
-  function cancel() {run++;clearTimeout(wait);wait=null;if(wake){const r=wake;wake=null;r();}playing=false;}
-  function sleep(ms) {return new Promise(resolve=>{wake=resolve;wait=setTimeout(()=>{wait=null;wake=null;resolve();},ms);});}
-  const isOpen = () => $('tutorialBackdrop').classList.contains('visible');
-  const still = nonce => nonce === run && isOpen();
-  function setStatus(a,b){$('tutorialStatus').textContent=a;$('tutorialDetail').textContent=b;}
-  function say(s){$('tutorialOutcome').textContent=s;}
-  function meter(text,hot=false){const el=$('tutorialMeter');el.textContent=text;el.classList.toggle('pulse',hot);}
-  function dots(count,at) {$('tutorialDots').replaceChildren(...Array.from({length:Math.max(1,count)},(_,i)=>{const dot=document.createElement('i');dot.classList.toggle('on',i<=at);return dot;}));}
-  function draw(values,options,selected=[],targets=[],click=false) {
-    const blown = new Set(selected), hit = new Set(targets);
-    values.forEach((n,i)=>{
-      const c=cells[i],t=options.types[i];
-      c.dataset.v=t===E.TYPES.ROCK?'rock':String(n);
-      c.dataset.type=t===E.TYPES.ROCK?'rock':t===E.TYPES.AMPLIFIER?'boost':t===E.TYPES.TARGET?'target':t===E.TYPES.DIAGONAL?'diagonal':t===E.TYPES.BOSS?'boss':'normal';
-      c.dataset.mark=t===E.TYPES.AMPLIFIER?'×2':t===E.TYPES.TARGET?(hit.has(i)?'✓':'◎'):t===E.TYPES.DIAGONAL?'✕':t===E.TYPES.BOSS?'HP':'';
-      c.textContent=t===E.TYPES.ROCK?'▦':n===0?'·':String(n);
-      c.classList.toggle('demo-click',click&&i===CENTER);
-      c.classList.toggle('demo-explode',blown.has(i));
-      c.classList.toggle('demo-cleared',hit.has(i));
-    });
-  }
-  // 演示棋盘是单独的 6x6 沙盒；真实游戏棋盘、步数、分数完全不受影响。
+const boardNode=$('tutorialBoard'),cells=[];
+let current=null,steps=[],pos=0,lastFocus=null,automatic=false;
+const wasSeen=id=>{if(sessionSeen.has(id))return true;try{return localStorage.getItem(KEY+id)==='1';}catch{return false;}};
+const record=id=>{sessionSeen.add(id);try{localStorage.setItem(KEY+id,'1');}catch{};window.dispatchEvent(new CustomEvent('critical-tutorial-seen',{detail:{id}}));};
+const hasOpen=()=>$('tutorialBackdrop').classList.contains('visible');
+const meter=(str,hot)=>{$('tutorialMeter').textContent=str;$('tutorialMeter').classList.toggle('pulse',Boolean(hot));};
+function renderGrid(values,options,selected=[],targets=[],click=false){
+  const active=new Set(selected),hit=new Set(targets);
+  values.forEach((n,i)=>{
+    const c=cells[i],t=options.types[i];
+    c.dataset.v=t===E.TYPES.ROCK?'rock':String(n);
+    c.dataset.type=t===E.TYPES.ROCK?'rock':t===E.TYPES.AMPLIFIER?'boost':t===E.TYPES.TARGET?'target':t===E.TYPES.DIAGONAL?'diagonal':t===E.TYPES.BOSS?'boss':'normal';
+    c.dataset.mark=t===E.TYPES.AMPLIFIER?'×2':t===E.TYPES.TARGET?(hit.has(i)?'✓':'◎'):t===E.TYPES.DIAGONAL?'✕':t===E.TYPES.BOSS?'HP':'';
+    c.textContent=t===E.TYPES.ROCK?'▦':n===0?'·':String(n);
+    c.classList.toggle('demo-click',click&&i===CENTER);
+    c.classList.toggle('demo-explode',active.has(i));
+    c.classList.toggle('demo-cleared',hit.has(i));
+    c.setAttribute('aria-hidden',String(i!==CENTER||!click));
+    c.tabIndex=click&&i===CENTER?0:-1;
+    c.setAttribute('aria-label',click&&i===CENTER?'点这里，亲手试一次':`第 ${Math.floor(i/6)+1} 行第 ${i%6+1} 列`);
+    c.classList.toggle('v25-clickable',click&&i===CENTER);
+  });
+}
   function scenario(id){
     const board=Array(36).fill(0),types=Array(36).fill(E.TYPES.NORMAL);
     let threshold=4;board[CENTER]=3;
@@ -2526,162 +2599,130 @@ init(true);
     const result=id==='pulseSkill'?E.applySkill(board,CENTER,'pulse',options):id==='overchargeSkill'?E.applySkill(board,CENTER,'overcharge',options):id==='coolSkill'?E.applySkill(board,CENTER,'cool',options):E.applyMove(board,CENTER,options);
     return {board,options,result};
   }
-  function planFor(mode,level=null,difficulty='easy',includeSeen=false){
-    const ids=[];const add=id=>{if(DATA[id]&&!ids.includes(id)&&(includeSeen||!wasSeen(id)))ids.push(id);};
-    add('base');
-    // 每条规则在真正开始使用前教学：首局不连续播放尚未接触的技能、任务。
-    // 技能折叠区打开时先讲系统规则，第一次点击某项技能时单独演示；任务入口也独立教学。
-    if(mode==='campaign'){
-      add('campaign');
-      // 不再依赖固定关卡编号：只要这一关实际含有新机制，就在开始前解释。
-      if(level){
-        if(level.goal==='chain'){add('chain');add('goalChain');}
-        if(level.goal==='explosions')add('goalExplosions');
-        if(level?.specials?.a?.length) add('boost');
-        if(level?.specials?.b?.length) add('boss');
-        if(level?.specials?.d?.length) add('diagonal');
-        if(level?.specials?.r?.length) add('rock');
-        if(level?.specials?.t?.length) add('target');
-        if(level?.specials?.a?.length && level?.specials?.t?.length)add('cross');
-        if(level.threshold===5)add('five');
-        if(level.threshold===6)add('six');
-        if(level?.specials?.a?.length && level?.specials?.r?.length && level?.specials?.t?.length)add('mixed');
-        if(level?.specials?.d?.length && level?.specials?.r?.length && level?.specials?.t?.length)add('diagonalMix');
-        if(level?.boss)add('boss');
-      }
+const SUMMARY={
+ base:'记住：每点一次 +1；达到临界数字，就向上下左右传能量。',
+ goalChain:'一次点击引发的连爆层数，才是这关的目标。',
+ goalExplosions:'整局爆炸次数会累计，不需要一次全部炸完。',
+ boost:'蓝色 ×2 格主动点击 +2；被爆炸波及仍只 +1。',
+ rock:'灰色石墙不会接收能量，也不能点击。',
+ target:'金色目标格只有自己爆炸，才算击中！',
+ five:'本关临界值是 5；数字 4 还没爆，数字 5 才爆。',
+ six:'本关临界值是 6；数字 5 还没爆。',
+ diagonal:'紫色 ✕ 传给四个斜角，普通格传给上下左右。',
+ boss:'优先点击 Boss 核心，主动点击 +2；每轮核心爆炸扣 1 HP。',
+};
+function planFor(mode,level=null,difficulty='easy',includeSeen=false){
+  // 每个关卡最多出现一次提示；重复机制不会自动弹出。
+  const want=id=>!!DATA[id] && (includeSeen||!wasSeen(id));
+  const candidate=[];
+  if(mode==='campaign'){
+    if(level){
+      if(level.id===1)candidate.push('base');
+      if(level.goal==='chain' && level.id<=3)candidate.push('goalChain');
+      if(level.goal==='explosions' && level.id<=4)candidate.push('goalExplosions');
+      if(level.specials?.a?.length)candidate.push('boost');
+      if(level.specials?.r?.length)candidate.push('rock');
+      if(level.specials?.t?.length)candidate.push('target');
+      if(level.threshold===5)candidate.push('five');
+      if(level.threshold===6)candidate.push('six');
+      if(level.specials?.d?.length)candidate.push('diagonal');
+      if(level.boss)candidate.push('boss');
     }
-    if(mode==='frenzy'){add('chain');add('frenzy');}
-    if(mode==='daily')add('daily');
-    if(mode==='blitz')add('blitz');
-    if(mode==='overload'){
-      add('overload');
-      if(difficulty==='hard')add('overloadHard');
-    }
-    return ids;
-  }
-  function setPlayButton(){const b=$('tutorialStart');b.disabled=playing;b.textContent=playing?'▶ 演示播放中…': index<queue.length-1?'下一条规则 →':'✓ 明白了，开始玩';}
-  function showAt(i){
-    cancel();index=i;current=queue[i];if(!current){close();return;}
-    const d=DATA[current];$('tutorialIcon').textContent=d.icon;$('tutorialTitle').textContent=d.title;$('tutorialLead').textContent=d.lead;
-    $('tutorialSequence').textContent=`本次新规则 ${index+1}/${queue.length}`;
-    $('tutorialAutoplay').textContent=automatic?'新机制出现 · 开局前演示':'规则演示 · 随时重播';
-    meter(d.meter);$('tutorialStart').textContent='▶ 演示播放中…';$('tutorialStart').disabled=true;
-    void play();
-  }
-  async function play(){
-    if(!current)return;
-    cancel();playing=true;setPlayButton();
-    const nonce=run,{board,options,result}=scenario(current);
-    const extra = current==='daily'?2:current==='blitz'||current==='frenzy'?1:0;
-    const total=Math.max(4,result.waves.length+3+extra);
-    let step=0;const advance=()=>dots(total,++step);
-    dots(total,0);draw(board,options);meter(DATA[current].meter);
-    setStatus('01 / 开始前','看中间发光的格子');say('先看棋盘，再看一次点击会发生什么。');
-    await sleep(650);if(!still(nonce))return;
-    if(current==='skills'){
-      advance();setStatus('SKILL 01 / 脉冲','⚡ 能量脉冲');meter('十字邻格 +1',true);draw(board,options,[],[],true);say('先按「能量脉冲」，再点棋盘目标格；上下左右邻格同时 +1。');
-      await sleep(650);if(!still(nonce))return;
-      advance();setStatus('SKILL 02 / 过载','💥 过载引爆');meter('指定格立即爆炸',true);draw(board,options,[13,15]);say('过载引爆可以让你选中的格子立刻爆炸，随后正常传播连锁。');
-      await sleep(650);if(!still(nonce))return;
-      advance();setStatus('SKILL 03 / 冷却','❄️ 紧急冷却');meter('目标数字降低 2',true);const coolBoard=board.slice();coolBoard[CENTER]=0;draw(coolBoard,options,[],[],true);say('冷却不会爆炸，而是把一个至少为 2 的数字降低 2，帮你整理局面。');
-      await sleep(800);if(!still(nonce))return;
-      draw(board,options);setStatus('演示完成 · 准备上场','3 种技能 · 每种 1 次');say('技能每局各用一次，并消耗一次点击机会。首次演示后，技能按钮才可使用。');
-      record(current);window.dispatchEvent(new CustomEvent('critical-tutorial-seen',{detail:{id:current}}));
-      playing=false;setPlayButton();if(automatic&&index<queue.length-1){await sleep(700);if(!still(nonce))return;showAt(index+1);}return;
-    }
-    if(current==='daily'){
-      advance();setStatus('02 / 重新开局','棋盘重新生成');meter('📅 今日棋盘 · 再来一次');say('今天再玩一局，开局数字不会随机变化。');
-      draw(Array(36).fill(0),options);
-      await sleep(550);if(!still(nonce))return;
-      advance();draw(board,options);say('看！又是完全相同的数字分布。');
-      await sleep(850);if(!still(nonce))return;
-    }
-    advance();draw(result.initial,options,[],[],true);
-    setStatus('02 / 操作',current==='pulseSkill'?'四周同时加能量':current==='overchargeSkill'?'目标格达到临界值':current==='coolSkill'?'目标数字下降':'中间的数字变化了');
-    say(current==='pulseSkill'?'⚡ 十字邻格同时 +1，接着会结算连锁。':current==='overchargeSkill'?'💥 目标格直接达到临界值，马上引爆。':current==='coolSkill'?'❄️ 数字降低 2，没有引发爆炸。':options.types[CENTER]===E.TYPES.AMPLIFIER?'⚡ 蓝框点击 +2！':`⚡ 点击一次 +1，达到 ${options.threshold} 才爆炸。`);
-    if(current==='blitz')meter('⏱️ 首次点击 → 开始 75 秒');
-    if(current==='frenzy')meter('🔥 剩余点击：9');
-    if(current==='overloadHard')meter('🔥 挑战：从 16 步减到 15 步');
-    await sleep(680);if(!still(nonce))return;
-    if(current==='coolSkill'){
-      draw(result.board,options,[],[]);meter('❄️ 数字 3 → 1',true);setStatus('COOLING / 冷却完成','本次不引发爆炸');say('看到了吗？冷却只降低数字，不会触发连锁。你可以把它留给危险的高数字。');
-      await sleep(900);if(!still(nonce))return;
-    }
-    const hits=[];let explosions=0,points=0,bossDamageShown=false;
-    for(const w of result.waves){
-      advance();for(const i of w.cells)if(options.types[i]===E.TYPES.TARGET&&!hits.includes(i))hits.push(i);
-      explosions+=w.cells.length;points+=w.points;
-      draw(w.board,options,w.cells,hits);
-      setStatus(`WAVE ${w.depth} / 爆炸`,`+${w.points} 分`);
-      say(current==='diagonal' && w.depth===1?'🟣 看四个斜角！中心紫色 ✕ 爆炸，直接传给左上、右上、左下、右下。':w.depth===1?'💥 爆炸！普通格向上下左右各传 +1。':`🔥 连锁第 ${w.depth} 层！相邻格子再次爆炸。`);
-      if(current==='campaign')meter(`🏁 得分 ${points}/20 · ${points>=20?'目标已达成 ✓':'努力中'}`,points>=20);
-      if(current==='goalChain')meter(`⚡ 最长连锁：${w.depth}/3 层`,w.depth>=3);
-      if(current==='goalExplosions')meter(`💣 已爆炸：${explosions}/3 次`,explosions>=3);
-      if(current==='target')meter(`🎯 目标：${hits.length}/1 ${hits.length?'✓':''}`,hits.length>0);
-      if(current==='cross'||current==='mixed')meter(`🎯 金色目标：${hits.length}/1 ${hits.length?'✓':''}`,hits.length>0);
-      if(current==='diagonalMix')meter(`🟣 折射命中金框：${hits.length}/1 ${hits.length?'✓':''}`,hits.length>0);
-      if(current==='boss' && w.cells.some(i=>options.types[i]===E.TYPES.BOSS) && !bossDamageShown){bossDamageShown=true;meter('👾 Boss生命：2 / 3',true);say('💥 Boss核心爆炸！这一整次点击造成 1 点伤害。');}
-      await sleep(760);if(!still(nonce))return;
-    }
-    if(current==='quests'){
-      advance();setStatus('MISSION / 任务进度','自动保存到本机');meter('📋 完成 2 局 · 3 层连锁 · 500 分');say('每局结束后自动更新任务进度，不用手动登记。');
-      await sleep(680);if(!still(nonce))return;
-      advance();setStatus('REWARD / 领取奖励','任务完成后可领取');meter('💎 领取 +1 晶核',true);say('点「每日任务」查看进度，完成后主动领取晶核；同一项每天只能领取一次。');
-      await sleep(800);if(!still(nonce))return;
-    }
-    if(current==='frenzy'){
-      advance();meter('🔥 三层连锁！额外 +1 步 → 10',true);setStatus('BONUS / 续命成功','奖励点击 +1');
-      say('原本用掉一步，因为达成 3 层连锁，又奖励回来 1 步！');
-      await sleep(740);if(!still(nonce))return;
-    }
-    if(current==='blitz'){
-      advance();meter('⏱️ 倒计时进行中：74 秒',true);setStatus('CLOCK / 倒计时开始','点击次数不限');
-      say('倒计时只会在首次点击后启动。演示里时间不会影响真实对局。');
-      await sleep(740);if(!still(nonce))return;
-    }
-    draw(result.board,options,[],hits);dots(total,total-1);
-    setStatus('演示完成 · 准备上场',`${result.depth} 层连锁 / ${result.points} 分`);
-    say('✅ '+DATA[current].end);
-    record(current);window.dispatchEvent(new CustomEvent('critical-tutorial-seen',{detail:{id:current}}));
-    if(current==='overload')record('six'); // 已完整展示「数字 5 达到 6 才爆炸」，无需重复播第二遍。
-    playing=false;setPlayButton();
-    if(automatic&&index<queue.length-1){await sleep(1150);if(!still(nonce))return;showAt(index+1);}
-  }
-  function launch(ids,auto=false){
-    if(!ids?.length)return;
-    cancel();queue=ids.slice();automatic=auto;nextFocus=document.activeElement;
-    $('tutorialBackdrop').classList.add('visible');showAt(0);
-  }
-  function close(){
-    cancel();$('tutorialBackdrop').classList.remove('visible');current=null;queue=[];index=0;
-    if(nextFocus?.isConnected && !nextFocus.closest('.backdrop:not(.visible)'))nextFocus.focus({preventScroll:true});
-    else $('help').focus({preventScroll:true});
-    window.dispatchEvent(new Event('critical-v15-tutorial-closed'));
-  }
-  function onEnter(mode,level=null,difficulty='easy'){
-    const context=mode+':'+(level?.id||0)+':'+difficulty;
-    activeScope=context;
-    const ids=planFor(mode,level,difficulty);
-    if(ids.length)launch(ids,true);
-  }
-  for(let i=0;i<SIZE*SIZE;i++){
-    const el=document.createElement('div');el.className='demo-cell';el.setAttribute('aria-hidden','true');cells.push(el);BOARD.append(el);
-  }
-  $('tutorialStart').addEventListener('click',()=>{
-    if(playing)return;
-    if(index<queue.length-1)showAt(index+1);
-    else close();
-  });
-  $('tutorialReplay').addEventListener('click',()=>void play());
-  $('tutorialBackdrop').addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();if(!playing){if(index<queue.length-1)showAt(index+1);else close();}}});
-  document.querySelectorAll('[data-demo]').forEach(btn=>btn.addEventListener('click',()=>{
-    $('rulesBackdrop').classList.remove('visible');launch([btn.dataset.demo],false);
-  }));
-  window.CriticalTutorial={onEnter,open:id=>launch([id],false),close,planFor,scenario,wasSeen,DATA};
-  // game.js 初始化时脚本尚未载入：首屏的教学立即补发，绝不等真实点击。
-  if(!document.getElementById('homeScreen')) onEnter('classic');
+  }else if(mode==='classic')candidate.push('base');
+  else if(mode==='overload')candidate.push('overload');
+  else if(mode==='frenzy')candidate.push('frenzy');
+  else if(mode==='blitz')candidate.push('blitz');
+  else if(mode==='daily')candidate.push('daily');
+  const first=candidate.find(want);
+  return first?[first]:[];
+}
+function addStep(arr,data,label,description,board,opts,explode=[],targets=[],click=false,meterText=null){
+ arr.push({label,description,board:board.slice(),opts,explode:explode.slice(),targets:targets.slice(),click,meterText:meterText??data.meter});
+}
+function buildStory(id){
+ const d=DATA[id],{board,options,result}=scenario(id),story=[];
+ const threshold=options.threshold;
+ addStep(story,d,'01 · 认识规则',d.lead,board,options,[],[],false,d.meter);
+ addStep(story,d,'02 · 你来点一下','👆 点棋盘中间发光的数字；也可以按「下一步」查看操作。',board,options,[],[],true,
+   `点击前：${board[CENTER]} → ${Math.min(threshold,board[CENTER]+(options.types[CENTER]===E.TYPES.AMPLIFIER||options.types[CENTER]===E.TYPES.BOSS?2:1))}`);
+ const isCool=id==='coolSkill';
+ addStep(story,d,'03 · 看清变化',isCool?'❄️ 冷却将目标数字降低 2。':
+   id==='pulseSkill'?'⚡ 施放能量脉冲，十字邻格得到能量。':
+   id==='overchargeSkill'?'💥 立即引爆，能量传向周围。':
+   options.types[CENTER]===E.TYPES.AMPLIFIER||options.types[CENTER]===E.TYPES.BOSS?'✨ 这格有特殊效果：主动点一下直接 +2！':'✨ 点击后数字加了 1，达到临界值就爆炸。',
+   result.initial,options,[],[],false,`本关临界值：${threshold} · 数字变化已完成`);
+ let shown=0,counts=0,pointTotal=0,hits=[];
+ for(const w of result.waves){
+   counts+=w.cells.length;pointTotal+=w.points;
+   for(const cell of w.cells)if(options.types[cell]===E.TYPES.TARGET&&!hits.includes(cell))hits.push(cell);
+   const important=w.depth<=3||w.depth===result.waves.length;
+   if(!important)continue;
+   const diag=id==='diagonal' || id==='diagonalMix';
+   const desc=w.depth===1?(diag?'🟣 看紫色 ✕ 格！它爆炸时把能量传向四个对角。':
+        options.types[CENTER]===E.TYPES.BOSS?'💥 Boss 核心爆炸，Boss 掉 1 点生命。':
+        '💥 达到临界值，周围四格分别得到 1 点能量。'):
+     `⚡ 第 ${w.depth} 层连锁！刚才接到能量的邻格继续爆炸。`;
+   addStep(story,d,`💥 第 ${w.depth} 层爆炸`,desc,w.board,options,w.cells,hits,false,`连爆 ${w.depth} 层 · 本次累计 ${counts} 格 · +${pointTotal} 分`);shown++;
+ }
+ if(result.waves.length>4){
+   addStep(story,d,'🌟 看到连锁的威力了吗',`本次一共 ${result.depth} 层连锁；太多波次时只展示关键画面，防止演示过长。`,result.board,options,[],hits,false,`总分 +${result.points} · ${result.detonations} 次爆炸`);
+ }
+ addStep(story,d,'✅ 规则学会啦',SUMMARY[id]||d.end,result.board,options,[],hits,false,`现在开始玩 · 记住这个小技巧`);
+ return story;
+}
+function showStep(){
+ if(!current)return;
+ const d=DATA[current],s=steps[pos],last=pos===steps.length-1;
+ $('tutorialIcon').textContent=d.icon;$('tutorialTitle').textContent=d.title;
+ $('tutorialLead').textContent=d.lead;
+ $('tutorialSequence').textContent=`慢速分步 ${pos+1}/${steps.length}`;
+ $('tutorialAutoplay').textContent=automatic?'第一次遇到：只教这一个新规则':'自主复习 · 不会影响真实棋盘';
+ $('tutorialStatus').textContent=s.label;$('tutorialDetail').textContent=pos===1?'点击中间发光格':last?'看懂就开始':'自己看清楚再继续';
+ $('tutorialOutcome').textContent=s.description;
+ meter(s.meterText,last);
+ renderGrid(s.board,s.opts,s.explode,s.targets,s.click);
+ $('tutorialDots').replaceChildren(...steps.map((_,i)=>{const e=document.createElement('i');e.classList.toggle('on',i<=pos);return e;}));
+ $('tutorialReplay').disabled=pos===0;
+ $('tutorialStart').textContent=last?'✅ 我学会了 · 开始玩！':pos===1?'👉 点发光格 / 下一步 →':`下一步 → (${pos+1}/${steps.length})`;
+}
+function launch(ids,auto=false){
+ const id=ids?.find(x=>DATA[x]);if(!id)return;
+ lastFocus=document.activeElement;current=id;automatic=auto;
+ steps=buildStory(id);pos=0;
+ $('tutorialBackdrop').classList.add('visible');showStep();
+}
+function close(){
+ if(current){record(current);if(current==='goalChain')record('chain');if(current==='overload')record('six');}
+ current=null;pos=0;steps=[];
+ $('tutorialBackdrop').classList.remove('visible');
+ if(lastFocus?.isConnected && !lastFocus.closest('.backdrop:not(.visible)'))lastFocus.focus({preventScroll:true});
+ else $('help').focus({preventScroll:true});
+ window.dispatchEvent(new Event('critical-v15-tutorial-closed'));
+}
+function next(){if(!current)return;if(pos===steps.length-1)close();else{pos++;showStep();}}
+function previous(){if(current&&pos>0){pos--;showStep();}}
+function onEnter(mode,level=null,difficulty='easy'){
+ const ids=planFor(mode,level,difficulty);
+ if(ids.length&&!hasOpen())launch(ids,true);
+}
+for(let i=0;i<SIZE*SIZE;i++){
+  const b=document.createElement('button');b.type='button';b.className='demo-cell';b.tabIndex=-1;
+  b.addEventListener('click',()=>{if(current&&pos===1&&i===CENTER)next();});
+  if(i===CENTER)b.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&pos===1){e.preventDefault();next();}});
+  cells.push(b);boardNode.append(b);
+}
+$('tutorialStart').addEventListener('click',next);
+$('tutorialReplay').addEventListener('click',previous);
+$('tutorialAgain').addEventListener('click',()=>{if(current){pos=0;showStep();}});
+$('tutorialBackdrop').addEventListener('keydown',e=>{
+  if(e.key==='Escape'){e.preventDefault();e.stopPropagation();close();}
+  if(e.key==='ArrowRight'){e.preventDefault();next();}
+  if(e.key==='ArrowLeft'){e.preventDefault();previous();}
+});
+document.querySelectorAll('[data-demo]').forEach(b=>b.addEventListener('click',()=>{$('rulesBackdrop').classList.remove('visible');launch([b.dataset.demo],false);}));
+window.CriticalTutorial={onEnter,open:id=>launch([id],false),close,planFor,scenario,wasSeen,DATA, getStep:()=>pos+1, getTotalSteps:()=>steps.length};
+if(!document.getElementById('homeScreen'))onEnter('classic');
 })();
-
 </script>
 
 <script>
@@ -2784,7 +2825,7 @@ init(true);
     });
   }
   async function playDemo(){
-    if(!current||busy)return;phase='demo';busy=true;activeSkill=null;const nonce=++runToken;setTrialBoard(current.id);phase='demo';busy=true;updateControls();$('trialPhaseTag').textContent='RULE PREVIEW / 新规则自动演示';
+    if(!current||busy)return;phase='demo';busy=true;activeSkill=null;const nonce=++runToken;setTrialBoard(current.id);phase='demo';busy=true;updateControls();$('trialPhaseTag').textContent='RULE PREVIEW / 新规则分步教学';
     status('演示开始：这是独立训练棋盘，不会消耗真实步数。');renderBoard();await wait(500);if(nonce!==runToken)return;
     const steps=current.steps;let demoBoard=board.slice(),demoExplosions=0,demoDepth=0;
     for(let i=0;i<steps.length;i++){
