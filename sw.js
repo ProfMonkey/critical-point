@@ -1,4 +1,4 @@
-const CACHE='critical-point-v24-static';
+const CACHE='critical-point-v25-static';
 const FILES=['./','./index.html','./manifest.webmanifest','./assets/critical-logo.svg','./assets/critical-192.png','./assets/critical-512.png'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('critical-point-')&&k!==CACHE).map(k=>caches.delete(k)))),self.clients.claim()])));
