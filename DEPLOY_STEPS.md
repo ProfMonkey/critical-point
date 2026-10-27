@@ -1,7 +1,7 @@
-# GitHub Pages 首次开启（最后一步）
-1. 打开 GitHub 仓库 `ProfMonkey/critical-point`。
-2. Settings → Pages。
-3. Build and deployment → Source 选择 **Deploy from a branch**。
-4. Branch 选择 **pages-v24**，目录选 **/(root)**，点 Save。
-5. 页面确认生成的 HTTPS 链接，然后手机打开并试玩检查。
-注意：本分支文件已提交，但如果仓库 Pages 未启用，上述步骤仍须仓库管理员操作。
+# 临界点 v2.5 网页发布
+
+已有公开仓库 `ProfMonkey/critical-point`，本版直接更新 GitHub Pages 专用 `pages-v24` 分支。主分支 `main` 保持不变。
+
+如果尚未配置 Pages，请打开 Settings → Pages，在 Build and deployment 下选择 Deploy from a branch，Branch 选 `pages-v24`、`/(root)`，点击 Save。
+
+网站预期网址：`https://profmonkey.github.io/critical-point/`（仅在 Pages 已启用且部署成功后有效）。建议手机测试首次教学、跳过后不重复、关卡 9/18/21/27/29、保存/导入以及失败后 +3 步。无须创建 GitHub Actions 工作流。
