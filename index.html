@@ -2625,8 +2625,8 @@ function planFor(mode,level=null,difficulty='easy',includeSeen=false){
       if(level.specials?.t?.length)candidate.push('target');
       if(level.threshold===5)candidate.push('five');
       if(level.threshold===6)candidate.push('six');
-      if(level.specials?.d?.length)candidate.push('diagonal');
-      if(level.boss)candidate.push('boss');
+      if(level.specials?.d?.length)candidate.unshift('diagonal');
+      if(level.boss)candidate.unshift('boss');
     }
   }else if(mode==='classic')candidate.push('base');
   else if(mode==='overload')candidate.push('overload');
